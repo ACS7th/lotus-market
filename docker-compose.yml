@@ -1,0 +1,123 @@
+services:
+  nginx:
+    image: nginx:1.27.2
+    networks:
+      front-net:
+        ipv4_address: 172.50.50.2
+    restart: always
+    ports:
+      - 8080:80
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf
+
+  frontend1:
+    image: dbgurum/guestbook:frontend_1.0
+    networks:
+      front-net:
+        ipv4_address: 172.50.50.3
+    restart: always
+    environment:
+      port: 8000
+      GUESTBOOK_API_ADDR: haproxy:8000
+    volumes:
+      - ./frontend/:/frontend
+  frontend2:
+    image: dbgurum/guestbook:frontend_1.0
+    networks:
+      front-net:
+        ipv4_address: 172.50.50.4
+    restart: always
+    volumes:
+      - ./frontend/:/frontend
+    environment:
+      port: 8000
+      GUESTBOOK_API_ADDR: haproxy:8000
+  frontend3:
+    image: dbgurum/guestbook:frontend_1.0
+    networks:
+      front-net:
+        ipv4_address: 172.50.50.5
+    restart: always
+    volumes:
+      - ./frontend/:/frontend
+    environment:
+      port: 8000
+      GUESTBOOK_API_ADDR: haproxy:8000
+
+  haproxy:
+    image: haproxytech/haproxy-alpine:2.4
+    networks:
+      front-net:
+        ipv4_address: 172.50.50.6
+      back-net:
+        ipv4_address: 172.50.50.18
+    restart: always
+    ports:
+      - 8404:8404
+    volumes:
+      - ./haproxy/haproxy.cfg:/usr/local/etc/haproxy/haproxy.cfg
+
+  backend1:
+    image: dbgurum/guestbook:backend_1.0
+    networks:
+      back-net:
+        ipv4_address: 172.50.50.19
+    restart: always
+    volumes:
+      - ./backend:/backend
+    environment:
+      PORT: 8000
+      GUESTBOOK_DB_ADDR: database:27017
+    depends_on:
+      - database
+  backend2:
+    image: dbgurum/guestbook:backend_1.0
+    networks:
+      back-net:
+        ipv4_address: 172.50.50.20
+    restart: always
+    volumes:
+      - ./backend:/backend
+    environment:
+      PORT: 8000
+      GUESTBOOK_DB_ADDR: database:27017
+    depends_on:
+      - database
+  backend3:
+    image: dbgurum/guestbook:backend_1.0
+    networks:
+      back-net:
+        ipv4_address: 172.50.50.21
+    restart: always
+    volumes:
+      - ./backend:/backend
+    environment:
+      PORT: 8000
+      GUESTBOOK_DB_ADDR: database:27017
+    depends_on:
+      - database
+
+  database:
+    image: mongo:4.0
+    networks:
+      back-net:
+        ipv4_address: 172.50.50.22
+    volumes:
+      - mongo-data:/data/db
+
+networks:
+  front-net:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.50.50.0/28
+          gateway: 172.50.50.1
+  back-net:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.50.50.16/28
+          gateway: 172.50.50.17
+
+volumes:
+  mongo-data:
