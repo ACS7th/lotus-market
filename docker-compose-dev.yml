@@ -107,16 +107,6 @@ services:
     volumes:
       - mongo-data:/data/db
 
-  image-server:
-    image: nginx:1.27.2 
-    networks:
-      front-net:
-        ipv4_address: 172.50.50.7 
-    restart: always
-    volumes:
-      - ./images:/usr/share/nginx/html/images 
-      - ./nginx/image-nginx-server.conf:/etc/nginx/nginx.conf
-
 networks:
   front-net:
     driver: bridge

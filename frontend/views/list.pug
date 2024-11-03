@@ -2,6 +2,7 @@ if messages.length > 0
     for msg in messages
         .card.my-3.col-12
             .card-body
+                img(src=msg.imageUrl, alt="no image")
                 h5.card-title #{msg.name}
                 h6.card-subtitle.mb-2.text-muted  #{msg.timeAgo} 
                 br
@@ -11,4 +12,4 @@ if messages.length > 0
 
 else
     p.alert.alert-info(role='alert')
-        | There is currently no data in the guestbook.
+        | There is currently no data.
