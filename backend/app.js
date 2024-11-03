@@ -24,7 +24,7 @@ messages.connectToMongoDB()
 
 // Starts an http server on the $PORT environment variable
 app.listen(PORT, () => {
-  console.log(`App listening on port ${PORT}`);
+  console.log(`Backend listening on port ${PORT}`);
   console.log('Press Ctrl+C to quit.');
 });
 
