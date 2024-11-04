@@ -52,8 +52,6 @@ services:
       back-net:
         ipv4_address: 172.50.50.18
     restart: always
-    ports:
-      - 8404:8404
     volumes:
       - ./haproxy/haproxy.cfg:/usr/local/etc/haproxy/haproxy.cfg
 
@@ -102,8 +100,6 @@ services:
     networks:
       back-net:
         ipv4_address: 172.50.50.22
-    ports:
-      - 27017:27017
     volumes:
       - mongo-data:/data/db
 
