@@ -14,6 +14,7 @@ const upload = multer(); // 메모리에 파일 저장
 
 // GET 요청 처리
 router.get('/messages', (req, res) => {
+
     console.log(`received request: ${req.method} ${req.url}`);
 
     // 메시지 조회
@@ -23,6 +24,7 @@ router.get('/messages', (req, res) => {
                 name: message.name,
                 body: message.body,
                 date: message.date,
+                title: message.title,
                 imageUrl: message.imageUrl,
                 timestamp: message._id.getTimestamp(),
             }));
@@ -35,14 +37,14 @@ router.get('/messages', (req, res) => {
 
 // POST 요청 처리 - `upload.none()` 사용하여 `multipart/form-data` 처리
 router.post('/messages', upload.none(), async (req, res) => {
-    const { name, body, date, imageUrl } = req.body;
+    const { name, body, date, title, imageUrl } = req.body;
 
-    if (!name || !body || !date) {
-        return res.status(400).json({ error: "name, body, and date are required fields" });
+    if (!name || !body || !date || !title) {
+        return res.status(400).json({ error: "name, body, title and date are required fields" });
     }
 
     try {
-        await Message.create({ name, body, date, imageUrl });
+        await Message.create({ name, body, date, title, imageUrl });
         res.status(200).send({ message: "Message created successfully" });
     } catch (err) {
         if (err.name === "ValidationError") {

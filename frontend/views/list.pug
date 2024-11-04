@@ -2,15 +2,15 @@ if messages.length > 0
     for msg in messages
         .card.my-3.col-12
             .card-body
+                h5.card-title.mt-4 #{msg.title}
+                h6.card-subtitle.mb-2.text-muted #{msg.timestamp} 
                 img(src=msg.imageUrl, alt="no image")
-                h5.card-title.mt-4 제목 backend
-                h6.card-subtitle.mb-2.text-muted  #{msg.timestamp} 
                 br
                 pre.card-text.message #{msg.body}
                 br
                 .user-info
                     p.card-text.name 작성자 : #{msg.name}
-                    p.card-text.date 유효일 : #{msg.date}
+                    p.card-text.date 구매일 : #{msg.date}
 
 else
     p.alert.alert-info(role='alert')

@@ -5,26 +5,22 @@ form.form-inline(action="/post", method="POST", enctype="multipart/form-data")
             .input-group-prepend
                 .input-group-text 작성자
             input#name.form-control(type="text", name="name", required)
-
         label.sr-only(for="date") Date
         .input-group.mb-2.mr-sm-2.date
             .input-group-prepend
-                .input-group-text 유효기간
+                .input-group-text 구매일
             input#date.form-control(type="date", name="date", required)
-
         label.sr-only(for="image") Image
         .input-group.mb-2.mr-sm-2.image
             .input-group-prepend
                 .input-group-text 사진
             input#image.form-control(type="file", name="image", accept="image/*")
-
     .title-line
         label.sr-only(for="title") Title
         .input-group.mb-2.mr-sm-2.title
             .input-group-prepend
                 .input-group-text 제목
-            input#title.form-control(type="text", name="name", required)
-
+            input#title.form-control(type="text", name="title", required)
     .second-line
         label.sr-only(for="message") Message
         .input-group.mb-2.mr-sm-2.message

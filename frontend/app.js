@@ -31,6 +31,7 @@ if (!process.env.GUESTBOOK_API_ADDR) {
 }
 
 var PORT = process.env.PORT;
+
 app.listen(PORT, function () {
     console.log("App listening on port " + PORT);
 });
@@ -64,13 +65,15 @@ router.post("/post", upload.single("image"), async function (req, res) {
     var name = req.body.name;
     var message = req.body.message;
     var date = req.body.date;
+    var title = req.body.title;
 
-    if (!name || !message || !date) {
-        return res.status(400).send("name, message, and date are required");
+    if (!name || !message || !date || !title) {
+        return res.status(400).send("name, message, title and date are required");
     }
 
     let imageUrl = null;
     let filename = null;
+
     if (req.file) {
         try {
             // 원본 파일 확장자 추출
@@ -109,6 +112,7 @@ router.post("/post", upload.single("image"), async function (req, res) {
             fs.unlink(req.file.path, (err) => {
                 if (err) console.error("Failed to delete temp file:", err);
             });
+
         } catch (error) {
             console.error("Error uploading image to image server:", error);
             res.status(500).send("Failed to upload image");
@@ -121,6 +125,7 @@ router.post("/post", upload.single("image"), async function (req, res) {
     form.append("name", name);
     form.append("body", message);
     form.append("date", date);
+    form.append("title", title);
     if (imageUrl) form.append("imageUrl", `${DOWNLOAD_IMAGE_URI}/${filename}`);
 
     axios

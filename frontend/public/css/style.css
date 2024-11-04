@@ -51,6 +51,10 @@ a:hover {
     width: 100%;
 }
 
+.title-line {
+    width: 100%;
+}
+
 .first-line {
     display: flex;
     gap: 10px;
@@ -82,8 +86,12 @@ a:hover {
     height: 100%;
 }
 
-.title-line{
+.input-group {
     width: 100%;
+}
+
+.input-group input#file-upload-button{
+    width: 100px;
 }
 
 h1 {

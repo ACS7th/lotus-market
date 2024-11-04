@@ -28,6 +28,7 @@ const messageSchema = mongoose.Schema({
     name: { type: String, required: [true, "Name is required"] },
     body: { type: String, required: [true, "Message Body is required"] },
     date: { type: Date },
+    title: { type: String },
     imageUrl: { type: String },
     timestamps: {},
 });
