@@ -1,12 +1,16 @@
-FROM node:8
-RUN useradd -ms /bin/bash frontuser
+FROM node:8-alpine AS builder
 WORKDIR /frontend
-
 COPY package*.json ./
 RUN npm install
-
 COPY . .
+# Final stage
+FROM node:8-alpine
+RUN apk add --no-cache shadow && \
+    useradd -ms /bin/bash frontuser
+WORKDIR /app
+COPY --from=builder /frontend /app
 USER frontuser
 
-ENTRYPOINT ["node", "--inspect=9229", "app.js"]
+ENTRYPOINT ["node", "app.js"]
+
 
