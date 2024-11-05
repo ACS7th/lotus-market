@@ -1,17 +1,26 @@
-# Use base node 8 image from Docker hub
-FROM node:8
+# Use a lightweight Node.js image (alpine version)
+FROM node:8-alpine AS builder
 
+# Set working directory and install dependencies
 WORKDIR /backend
-
-# Copy package.json and install dependencies
 COPY package*.json ./
-RUN npm install
+RUN npm install --production
 
-# Copy rest of the application csource code
+# Copy the rest of the application source code
 COPY . .
 
-# Run app.js with debugging port when container launches
-ENTRYPOINT ["node", "--inspect=9229", "app.js"]
+# Use a minimal Node.js image for running the app (production stage)
+FROM node:8-alpine
 
-# Comment above and uncomment below to run app.js without debugger port when container launches
-# ENTRYPOINT ["node", "app.js"]
+# Set working directory and copy only necessary files from builder stage
+WORKDIR /backend
+COPY --from=builder /backend .
+
+# Set a non-root user for better security
+RUN adduser -D backuser
+USER backuser
+
+# Run the application
+CMD ["node", "app.js"]
+
+
