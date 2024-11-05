@@ -1,5 +1,7 @@
 # Use base node 8 image from Docker hub
 FROM node:8
+RUN useradd -ms /bin/bash backuser
+
 
 WORKDIR /backend
 
@@ -9,7 +11,7 @@ RUN npm install
 
 # Copy rest of the application csource code
 COPY . .
-
+USER backuser
 # Run app.js with debugging port when container launches
 ENTRYPOINT ["node", "--inspect=9229", "app.js"]
 

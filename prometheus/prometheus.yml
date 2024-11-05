@@ -1,0 +1,23 @@
+global:
+  scrape_interval: 15s          # 각 타겟에서 메트릭을 수집하는 주기
+  evaluation_interval: 15s      # 규칙을 평가하는 주기
+
+# Alertmanager 설정 (Alertmanager 컨테이너가 `alertmanager`라는 이름으로 실행 중일 경우)
+alerting:
+  alertmanagers:
+    - static_configs:
+        - targets:
+            - "alertmanager:9093"  # Alertmanager의 주소와 포트
+
+scrape_configs:
+  # Prometheus 자체 메트릭 수집
+  - job_name: "prometheus"
+    static_configs:
+      - targets: ["localhost:9090"]
+
+  # cAdvisor 메트릭 수집
+  - job_name: "cadvisor"
+    static_configs:
+      - targets: ["cadvisor:8080"]
+
+
