@@ -11,19 +11,21 @@ services:
       - ./nginx/nginx.conf:/etc/nginx/nginx.conf
 
   frontend1:
-    image: dbgurum/guestbook:frontend_1.0
+    build:
+      context: ./frontend/
     networks:
       front-net:
         ipv4_address: 172.50.50.3
     restart: always
     environment:
-      port: 8000
+      PORT: 8000
       GUESTBOOK_API_ADDR: haproxy:8000
       IMAGE_SERVER_URI: https://image-server.asordk.synology.me
     volumes:
       - ./frontend/:/frontend
   frontend2:
-    image: dbgurum/guestbook:frontend_1.0
+    build:
+      context: ./frontend/
     networks:
       front-net:
         ipv4_address: 172.50.50.4
@@ -31,11 +33,12 @@ services:
     volumes:
       - ./frontend/:/frontend
     environment:
-      port: 8000
+      PORT: 8000
       GUESTBOOK_API_ADDR: haproxy:8000
       IMAGE_SERVER_URI: https://image-server.asordk.synology.me
   frontend3:
-    image: dbgurum/guestbook:frontend_1.0
+    build:
+      context: ./frontend/
     networks:
       front-net:
         ipv4_address: 172.50.50.5
@@ -43,7 +46,7 @@ services:
     volumes:
       - ./frontend/:/frontend
     environment:
-      port: 8000
+      PORT: 8000
       GUESTBOOK_API_ADDR: haproxy:8000
       IMAGE_SERVER_URI: https://image-server.asordk.synology.me
 
@@ -61,7 +64,8 @@ services:
       - ./haproxy/haproxy.cfg:/usr/local/etc/haproxy/haproxy.cfg
 
   backend1:
-    image: dbgurum/guestbook:backend_1.0
+    build:
+      context: ./backend/
     networks:
       back-net:
         ipv4_address: 172.50.50.19
@@ -74,6 +78,8 @@ services:
     depends_on:
       - database
   backend2:
+    build:
+      context: ./backend/
     image: dbgurum/guestbook:backend_1.0
     networks:
       back-net:
@@ -87,6 +93,8 @@ services:
     depends_on:
       - database
   backend3:
+    build:
+      context: ./backend/
     image: dbgurum/guestbook:backend_1.0
     networks:
       back-net:
