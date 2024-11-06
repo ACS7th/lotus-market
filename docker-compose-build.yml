@@ -2,7 +2,7 @@ services:
   nginx:
     build:
       context: ./nginx/
-    image: 192.168.0.30:5000/nginx:1.27.2
+    image: 192.168.0.30:5000/lotus/nginx:1.27.2
     networks:
       front-net:
     restart: always
@@ -12,7 +12,7 @@ services:
   frontend:
     build:
       context: ./frontend/
-    image: 192.168.0.30:5000/frontend:1.0
+    image: 192.168.0.30:5000/lotus/frontend:1.0
     networks:
       front-net:
     restart: always
@@ -22,7 +22,9 @@ services:
       IMAGE_SERVER_URI: https://image-server.asordk.synology.me
 
   haproxy:
-    image: 192.168.0.30:5000/haproxy:2.4
+    build:
+      context: ./haproxy/
+    image: 192.168.0.30:5000/lotus/haproxy:2.4
     networks:
       front-net:
       back-net:
@@ -33,7 +35,7 @@ services:
   backend:
     build:
       context: ./backend/
-    image: 192.168.0.30:5000/backend:1.0
+    image: 192.168.0.30:5000/lotus/backend:1.0
     networks:
       back-net:
     restart: always
@@ -44,7 +46,9 @@ services:
       - database
 
   database:
-    image: 192.168.0.30:5000/mongo:4.0
+    build:
+      context: ./database/
+    image: 192.168.0.30:5000/lotus/mongo:4.0
     networks:
       back-net:
     ports:
