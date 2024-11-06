@@ -91,18 +91,6 @@ services:
     deploy:
       replicas: 1
 
-  cadvisor:
-    build:
-      context: ./cadvisor/
-    image: 192.168.0.30:5000/lotus/cadvisor:1.0
-    volumes:
-      - /rootfs:/rootfs:ro
-      - /var/run/docker.sock:/var/run/docker.sock:ro
-      - /sys:/sys:ro
-      - /var/lib/docker:/var/lib/docker:ro
-    deploy:
-      replicas: 1
-
 networks:
   front-net:
     driver: overlay
