@@ -2,7 +2,7 @@ services:
   nginx:
     build:
       context: ./nginx/
-    image: 192.168.0.30:5000/lotus/nginx:1.27.2
+    image: 192.168.0.30:5000/lotus/nginx:1.1
     networks:
       - front-net
     restart: always
@@ -12,7 +12,7 @@ services:
   frontend:
     build:
       context: ./frontend/
-    image: 192.168.0.30:5000/lotus/frontend:1.0
+    image: 192.168.0.30:5000/lotus/frontend:1.1
     networks:
       - front-net
     restart: always
@@ -28,9 +28,10 @@ services:
   haproxy:
     build:
       context: ./haproxy/
-    image: 192.168.0.30:5000/lotus/haproxy:2.4
+    image: 192.168.0.30:5000/lotus/haproxy:1.1
     networks:
       - front-net
+      - back-net
     restart: always
     volumes:
       - ./haproxy/haproxy.cfg:/usr/local/etc/haproxy/haproxy.cfg
@@ -42,9 +43,9 @@ services:
   backend:
     build:
       context: ./backend/
-    image: 192.168.0.30:5000/lotus/backend:1.0
+    image: 192.168.0.30:5000/lotus/backend:1.1
     networks:
-      - front-net
+      - back-net
     restart: always
     environment:
       PORT: 8000
@@ -59,9 +60,9 @@ services:
   database:
     build:
       context: ./database/
-    image: 192.168.0.30:5000/lotus/mongo:4.0
+    image: 192.168.0.30:5000/lotus/mongo:1.1
     networks:
-      - front-net
+      - back-net
     ports:
       - 27017:27017
     volumes:
@@ -72,32 +73,36 @@ services:
   prometheus:
     build:
       context: ./prometheus/
-    image: 192.168.0.30:5000/lotus/prometheus:4.0
+    image: 192.168.0.30:5000/lotus/prometheus:1.1
     networks:
-      - front-net
+      - monitoring-net
     deploy:
       replicas: 1
 
   grafana:
     build:
       context: ./grafana/
-    image: 192.168.0.30:5000/lotus/grafana:4.0
+    image: 192.168.0.30:5000/lotus/grafana:1.1
     networks:
-      - front-net
+      - monitoring-net
     deploy:
       replicas: 1
 
-  image-server:
+  cadvisor:
     build:
-      context: ./image-server/
-    image: 192.168.0.30:5000/lotus/image-server:1.0
+      context: ./cadvisor/
+    image: 192.168.0.30:5000/lotus/cadvisor:1.1
     networks:
-      - front-net
+      - monitoring-net
     deploy:
       replicas: 1
 
 networks:
   front-net:
+    driver: overlay
+  back-net:
+    driver: overlay
+  monitoring-net:
     driver: overlay
 
 volumes:
