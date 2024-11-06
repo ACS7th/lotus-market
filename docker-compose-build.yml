@@ -80,7 +80,6 @@ services:
   backend2:
     build:
       context: ./backend/
-    image: dbgurum/guestbook:backend_1.0
     networks:
       back-net:
         ipv4_address: 172.50.50.20
@@ -95,7 +94,6 @@ services:
   backend3:
     build:
       context: ./backend/
-    image: dbgurum/guestbook:backend_1.0
     networks:
       back-net:
         ipv4_address: 172.50.50.21

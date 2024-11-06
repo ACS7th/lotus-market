@@ -10,8 +10,7 @@ RUN apk add --no-cache shadow && \
     useradd -ms /bin/bash backuser
 RUN mkdir -p /app
 WORKDIR /app
-COPY --from=builder  /backend /app
-COPY --from=builder  /backend/node_modules ./node_modules
+COPY --from=builder /backend /app
 RUN chown -R backuser:backuser /app && chmod -R 755 /app
 USER backuser
 ENTRYPOINT ["node", "app.js"]
