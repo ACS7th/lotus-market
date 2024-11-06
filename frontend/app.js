@@ -9,8 +9,8 @@ var multer = require("multer");
 
 var GUESTBOOK_API_ADDR = process.env.GUESTBOOK_API_ADDR;
 var BACKEND_URI = "http://" + GUESTBOOK_API_ADDR + "/messages";
-var IMAGE_SERVER_URI = "http://image-server/upload-image";
-var DOWNLOAD_IMAGE_URI = "https://image-server.asordk.synology.me/upload-image";
+var IMAGE_SERVER_URI = `${process.env.IMAGE_SERVER_URI}/upload-image`;
+var DOWNLOAD_IMAGE_URI = `${process.env.IMAGE_SERVER_URI}/upload-image`;
 
 app.set("view engine", "pug");
 app.set("views", path.join(__dirname, "views"));

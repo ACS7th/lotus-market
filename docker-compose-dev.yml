@@ -19,6 +19,7 @@ services:
     environment:
       port: 8000
       GUESTBOOK_API_ADDR: haproxy:8000
+      IMAGE_SERVER_URI: https://image-server.asordk.synology.me
     volumes:
       - ./frontend/:/frontend
   frontend2:
@@ -32,6 +33,7 @@ services:
     environment:
       port: 8000
       GUESTBOOK_API_ADDR: haproxy:8000
+      IMAGE_SERVER_URI: https://image-server.asordk.synology.me
   frontend3:
     image: dbgurum/guestbook:frontend_1.0
     networks:
@@ -43,6 +45,7 @@ services:
     environment:
       port: 8000
       GUESTBOOK_API_ADDR: haproxy:8000
+      IMAGE_SERVER_URI: https://image-server.asordk.synology.me
 
   haproxy:
     image: haproxytech/haproxy-alpine:2.4
