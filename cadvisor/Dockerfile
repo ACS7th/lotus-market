@@ -1,3 +1,6 @@
-# cAdvisor의 최신 이미지를 기반으로 설정
 FROM gcr.io/cadvisor/cadvisor:latest
-
+RUN adduser -D -s /bin/false cadvuser && \
+mkdir -p /rootfs
+RUN chown -R cadvuser:cadvuser /rootfs  && \
+chmod -R 755 /rootfs
+USER cadvuser

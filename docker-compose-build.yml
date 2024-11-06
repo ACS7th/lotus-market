@@ -4,7 +4,7 @@ services:
       context: ./nginx/
     image: 192.168.0.30:5000/lotus/nginx:1.27.2
     networks:
-      - front-net
+      front-net:
     restart: always
     ports:
       - 8080:80
@@ -14,96 +14,82 @@ services:
       context: ./frontend/
     image: 192.168.0.30:5000/lotus/frontend:1.0
     networks:
-      - front-net
+      front-net:
     restart: always
     environment:
       PORT: 8000
       GUESTBOOK_API_ADDR: haproxy:8000
       IMAGE_SERVER_URI: https://image-server.asordk.synology.me
-    deploy:
-      replicas: 5   # frontend 서비스에 5개의 replica 설정
-      restart_policy:
-        condition: on-failure
 
   haproxy:
     build:
       context: ./haproxy/
     image: 192.168.0.30:5000/lotus/haproxy:2.4
     networks:
-      - front-net
-      - back-net
+      front-net:
+      back-net:
     restart: always
     volumes:
       - ./haproxy/haproxy.cfg:/usr/local/etc/haproxy/haproxy.cfg
-    deploy:
-      replicas: 1
-      restart_policy:
-        condition: on-failure
 
   backend:
     build:
       context: ./backend/
     image: 192.168.0.30:5000/lotus/backend:1.0
     networks:
-      - back-net
+      back-net:
     restart: always
     environment:
       PORT: 8000
       GUESTBOOK_DB_ADDR: database:27017
     depends_on:
       - database
-    deploy:
-      replicas: 5   # backend 서비스에 5개의 replica 설정
-      restart_policy:
-        condition: on-failure
 
   database:
     build:
       context: ./database/
     image: 192.168.0.30:5000/lotus/mongo:4.0
     networks:
-      - back-net
+      back-net:
     ports:
       - 27017:27017
     volumes:
       - mongo-data:/data/db
-    deploy:
-      replicas: 1
 
   prometheus:
     build:
       context: ./prometheus/
     image: 192.168.0.30:5000/lotus/prometheus:4.0
-    deploy:
-      replicas: 1
 
   grafana:
     build:
       context: ./grafana/
     image: 192.168.0.30:5000/lotus/grafana:4.0
-    deploy:
-      replicas: 1
 
   image-server:
     build:
-      context: ./image-server/
-    image: 192.168.0.30:5000/lotus/image-server:1.0
-    deploy:
-      replicas: 1
+      context: ./grafana/
+    image: 192.168.0.30:5000/lotus/grafana:4.0
+
+  cadvisor:
+    build:
+      context: ./cadvisor/
+    image: 192.168.0.30:5000/lotus/cadvisor:4.0
 
 networks:
   front-net:
-    driver: overlay
+    driver: bridge
     ipam:
       config:
         - subnet: 172.50.50.0/28
           gateway: 172.50.50.1
   back-net:
-    driver: overlay
+    driver: bridge
     ipam:
       config:
         - subnet: 172.50.50.16/28
           gateway: 172.50.50.17
+
 
 volumes:
   mongo-data:

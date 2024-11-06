@@ -21,7 +21,7 @@ services:
       GUESTBOOK_API_ADDR: haproxy:8000
       IMAGE_SERVER_URI: https://image-server.asordk.synology.me
     deploy:
-      replicas: 5   # frontend 서비스에 5개의 replica 설정
+      replicas: 5
       restart_policy:
         condition: on-failure
 
@@ -53,7 +53,7 @@ services:
     depends_on:
       - database
     deploy:
-      replicas: 5   # backend 서비스에 5개의 replica 설정
+      replicas: 5
       restart_policy:
         condition: on-failure
 
@@ -91,19 +91,29 @@ services:
     deploy:
       replicas: 1
 
+  cadvisor:
+    build:
+      context: ./cadvisor/
+    image: 192.168.0.30:5000/lotus/cadvisor:1.0
+    volumes:
+      - /rootfs:/rootfs:ro
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - /sys:/sys:ro
+      - /var/lib/docker:/var/lib/docker:ro
+    deploy:
+      replicas: 1
+
 networks:
   front-net:
     driver: overlay
     ipam:
       config:
         - subnet: 172.50.50.0/28
-          gateway: 172.50.50.1
   back-net:
     driver: overlay
     ipam:
       config:
         - subnet: 172.50.50.16/28
-          gateway: 172.50.50.17
 
 volumes:
   mongo-data:
