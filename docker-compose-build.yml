@@ -2,37 +2,17 @@ services:
   nginx:
     build:
       context: ./nginx/
+    image: 192.168.0.30:5000/nginx:1.27.2
     networks:
       front-net:
     restart: always
     ports:
       - 8080:80
 
-  frontend1:
+  frontend:
     build:
       context: ./frontend/
-    networks:
-      front-net:
-    restart: always
-    environment:
-      PORT: 8000
-      GUESTBOOK_API_ADDR: haproxy:8000
-      IMAGE_SERVER_URI: https://image-server.asordk.synology.me
-    volumes:
-      - ./frontend/:/frontend
-  frontend2:
-    build:
-      context: ./frontend/
-    networks:
-      front-net:
-    restart: always
-    environment:
-      PORT: 8000
-      GUESTBOOK_API_ADDR: haproxy:8000
-      IMAGE_SERVER_URI: https://image-server.asordk.synology.me
-  frontend3:
-    build:
-      context: ./frontend/
+    image: 192.168.0.30:5000/frontend:1.0
     networks:
       front-net:
     restart: always
@@ -42,7 +22,7 @@ services:
       IMAGE_SERVER_URI: https://image-server.asordk.synology.me
 
   haproxy:
-    image: haproxytech/haproxy-alpine:2.4
+    image: 192.168.0.30:5000/haproxy:2.4
     networks:
       front-net:
       back-net:
@@ -50,31 +30,10 @@ services:
     volumes:
       - ./haproxy/haproxy.cfg:/usr/local/etc/haproxy/haproxy.cfg
 
-  backend1:
+  backend:
     build:
       context: ./backend/
-    networks:
-      back-net:
-    restart: always
-    environment:
-      PORT: 8000
-      GUESTBOOK_DB_ADDR: database:27017
-    depends_on:
-      - database
-  backend2:
-    build:
-      context: ./backend/
-    networks:
-      back-net:
-    restart: always
-    environment:
-      PORT: 8000
-      GUESTBOOK_DB_ADDR: database:27017
-    depends_on:
-      - database
-  backend3:
-    build:
-      context: ./backend/
+    image: 192.168.0.30:5000/backend:1.0
     networks:
       back-net:
     restart: always
@@ -85,7 +44,7 @@ services:
       - database
 
   database:
-    image: mongo:4.0
+    image: 192.168.0.30:5000/mongo:4.0
     networks:
       back-net:
     ports:
@@ -109,3 +68,4 @@ networks:
 
 volumes:
   mongo-data:
+
