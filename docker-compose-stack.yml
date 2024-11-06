@@ -31,7 +31,6 @@ services:
     image: 192.168.0.30:5000/lotus/haproxy:2.4
     networks:
       - front-net
-      - back-net
     restart: always
     volumes:
       - ./haproxy/haproxy.cfg:/usr/local/etc/haproxy/haproxy.cfg
@@ -45,7 +44,7 @@ services:
       context: ./backend/
     image: 192.168.0.30:5000/lotus/backend:1.0
     networks:
-      - back-net
+      - front-net
     restart: always
     environment:
       PORT: 8000
@@ -62,7 +61,7 @@ services:
       context: ./database/
     image: 192.168.0.30:5000/lotus/mongo:4.0
     networks:
-      - back-net
+      - front-net
     ports:
       - 27017:27017
     volumes:
@@ -74,6 +73,8 @@ services:
     build:
       context: ./prometheus/
     image: 192.168.0.30:5000/lotus/prometheus:4.0
+    networks:
+      - front-net
     deploy:
       replicas: 1
 
@@ -81,6 +82,8 @@ services:
     build:
       context: ./grafana/
     image: 192.168.0.30:5000/lotus/grafana:4.0
+    networks:
+      - front-net
     deploy:
       replicas: 1
 
@@ -88,20 +91,14 @@ services:
     build:
       context: ./image-server/
     image: 192.168.0.30:5000/lotus/image-server:1.0
+    networks:
+      - front-net
     deploy:
       replicas: 1
 
 networks:
   front-net:
     driver: overlay
-    ipam:
-      config:
-        - subnet: 172.50.50.0/28
-  back-net:
-    driver: overlay
-    ipam:
-      config:
-        - subnet: 172.50.50.16/28
 
 volumes:
   mongo-data:
