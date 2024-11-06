@@ -56,6 +56,21 @@ services:
     volumes:
       - mongo-data:/data/db
 
+  prometheus:
+    build:
+      context: ./prometheus/
+    image: 192.168.0.30:5000/lotus/prometheus:4.0
+
+  grafana:
+    build:
+      context: ./grafana/
+    image: 192.168.0.30:5000/lotus/grafana:4.0
+
+  image-server:
+    build:
+      context: ./image-server/
+    image: 192.168.0.30:5000/lotus/image-server:1.0
+
 networks:
   front-net:
     driver: bridge
@@ -69,6 +84,7 @@ networks:
       config:
         - subnet: 172.50.50.16/28
           gateway: 172.50.50.17
+
 
 volumes:
   mongo-data:
