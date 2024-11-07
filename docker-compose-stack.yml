@@ -1,3 +1,4 @@
+
 services:
   nginx:
     build:
@@ -5,9 +6,12 @@ services:
     image: 192.168.0.30:5000/lotus/nginx:1.1
     networks:
       - front-net
-    restart: always
     ports:
       - 8080:80
+    deploy:
+      placement:
+        constraints:
+          - node.hostname != swarm-manager
 
   frontend:
     build:
@@ -15,30 +19,38 @@ services:
     image: 192.168.0.30:5000/lotus/frontend:1.1
     networks:
       - front-net
-    restart: always
     environment:
       PORT: 8000
       GUESTBOOK_API_ADDR: haproxy:8000
       IMAGE_SERVER_URI: https://image-server.asordk.synology.me
     deploy:
-      replicas: 5
+      replicas: 3
       restart_policy:
         condition: on-failure
+      update_config:
+        parallelism: 1
+        delay: 30s
+        order: start-first
+      placement:
+        constraints:
+          - node.hostname != swarm-manager
 
   haproxy:
     build:
       context: ./haproxy/
-    image: 192.168.0.30:5000/lotus/haproxy:1.1
+    image: 192.168.0.30:5000/lotus/haproxy-lot:1.2
     networks:
       - front-net
       - back-net
-    restart: always
     volumes:
       - ./haproxy/haproxy.cfg:/usr/local/etc/haproxy/haproxy.cfg
     deploy:
       replicas: 1
       restart_policy:
         condition: on-failure
+      placement:
+        constraints:
+          - node.hostname == swarm-manager
 
   backend:
     build:
@@ -46,7 +58,6 @@ services:
     image: 192.168.0.30:5000/lotus/backend:1.1
     networks:
       - back-net
-    restart: always
     environment:
       PORT: 8000
       GUESTBOOK_DB_ADDR: database:27017
@@ -56,6 +67,9 @@ services:
       replicas: 5
       restart_policy:
         condition: on-failure
+      placement:
+        constraints:
+          - node.hostname != swarm-manager
 
   database:
     build:
@@ -63,12 +77,13 @@ services:
     image: 192.168.0.30:5000/lotus/mongo:1.1
     networks:
       - back-net
-    ports:
-      - 27017:27017
     volumes:
       - mongo-data:/data/db
     deploy:
       replicas: 1
+      placement:
+        constraints:
+          - node.hostname == swarm-worker2
 
   prometheus:
     build:
@@ -78,6 +93,11 @@ services:
       - monitoring-net
     deploy:
       replicas: 1
+      placement:
+        constraints:
+          - node.role == manager
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
 
   grafana:
     build:
@@ -87,6 +107,11 @@ services:
       - monitoring-net
     deploy:
       replicas: 1
+      placement:
+        constraints:
+          - node.role == manager
+    ports:
+      - 3000:3000
 
   cadvisor:
     build:
@@ -95,7 +120,22 @@ services:
     networks:
       - monitoring-net
     deploy:
-      replicas: 1
+      mode: global
+      labels:
+        prometheus-job: cadvisor
+    user : root
+    privileged: true
+    volumes:
+      - /:/rootfs:ro
+      - /var/run:/var/run:rw
+      - /sys:/sys:ro
+      - /var/lib/docker/:/var/lib/docker:ro
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+    ports:
+      - target: 8080
+        protocol: tcp
+        mode: host
+    command: -docker_only
 
 networks:
   front-net:
@@ -107,3 +147,4 @@ networks:
 
 volumes:
   mongo-data:
+

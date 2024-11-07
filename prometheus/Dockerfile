@@ -7,6 +7,9 @@ COPY ./prometheus.yml /opt/bitnami/prometheus/conf/prometheus.yml
 
 # 권한 설정을 하나의 RUN 명령으로 통합
 RUN chown -R prometheususer:prometheususer /opt/bitnami/prometheus && \
-    chmod -R 755 /opt/bitnami/prometheus
+    chmod -R 755 /opt/bitnami/prometheus && \
+    mkdir -p /var/run && \
+    chown -R prometheususer:prometheususer /var/run
+
 
 USER prometheususer

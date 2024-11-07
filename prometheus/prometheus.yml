@@ -1,6 +1,6 @@
 global:
-  scrape_interval: 15s          # 각 타겟에서 메트릭을 수집하는 주기
-  evaluation_interval: 15s      # 규칙을 평가하는 주기
+  scrape_interval: 5s          # 각 타겟에서 메트릭을 수집하는 주기
+  evaluation_interval: 5s      # 규칙을 평가하는 주기
 
 # Alertmanager 설정 (Alertmanager 컨테이너가 `alertmanager`라는 이름으로 실행 중일 경우)
 alerting:
@@ -15,9 +15,16 @@ scrape_configs:
     static_configs:
       - targets: ["localhost:9090"]
 
-  # cAdvisor 메트릭 수집
   - job_name: "cadvisor"
-    static_configs:
-      - targets: ["cadvisor:8080"]
+    dockerswarm_sd_configs:
+      - host: unix:///var/run/docker.sock
+        role: tasks
+    relabel_configs:
+      - source_labels: [__meta_dockerswarm_service_label_prometheus_job]
+        regex: (.+)
+        action: keep
+        target_label: job
 
-
+      - source_labels: [__address__]
+        regex: .*:0
+        action: drop
