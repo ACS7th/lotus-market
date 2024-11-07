@@ -9,7 +9,7 @@ COPY ./prometheus.yml /opt/bitnami/prometheus/conf/prometheus.yml
 RUN chown -R prometheususer:prometheususer /opt/bitnami/prometheus && \
     chmod -R 755 /opt/bitnami/prometheus && \
     mkdir -p /var/run && \
-    chown -R prometheususer:prometheususer /var/run
+    chown -R prometheususer:prometheususer /var/run 
 
 
 USER prometheususer
