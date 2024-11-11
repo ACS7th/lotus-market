@@ -1,0 +1,12 @@
+spring:
+  application:
+    name: asordk 
+
+  data:
+    mongodb:
+      database: guestbook
+      host: ${MONGO_DB_HOST:localhost}
+      port: 27017
+
+server:
+  port: 19999

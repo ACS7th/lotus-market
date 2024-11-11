@@ -4,4 +4,3 @@ mkdir -p /rootfs
 RUN chown -R cadvuser:cadvuser /rootfs  && \
 chmod -R 755 /rootfs
 USER cadvuser
-
