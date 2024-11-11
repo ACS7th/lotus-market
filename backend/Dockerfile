@@ -1,19 +1,16 @@
-# Use base node 8 image from Docker hub
-FROM node:8
-RUN useradd -ms /bin/bash backuser
-
-
+#build stage
+FROM node:8-alpine AS builder
 WORKDIR /backend
-
-# Copy package.json and install dependencies
-COPY package*.json ./
+COPY . .
 RUN npm install
 
-# Copy rest of the application csource code
-COPY . .
+#final stage
+FROM node:8-alpine
+RUN apk add --no-cache shadow && \
+    useradd -ms /bin/bash backuser
+RUN mkdir -p /app
+WORKDIR /app
+COPY --from=builder /backend /app
+RUN chown -R backuser:backuser /app && chmod -R 755 /app
 USER backuser
-# Run app.js with debugging port when container launches
-ENTRYPOINT ["node", "--inspect=9229", "app.js"]
-
-# Comment above and uncomment below to run app.js without debugger port when container launches
-# ENTRYPOINT ["node", "app.js"]
+ENTRYPOINT ["node", "app.js"]

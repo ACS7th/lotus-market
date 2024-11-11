@@ -19,6 +19,7 @@ services:
     environment:
       port: 8000
       GUESTBOOK_API_ADDR: haproxy:8000
+      IMAGE_SERVER_URI: https://image-server.asordk.synology.me
     volumes:
       - ./frontend/:/frontend
   frontend2:
@@ -32,6 +33,7 @@ services:
     environment:
       port: 8000
       GUESTBOOK_API_ADDR: haproxy:8000
+      IMAGE_SERVER_URI: https://image-server.asordk.synology.me
   frontend3:
     image: dbgurum/guestbook:frontend_1.0
     networks:
@@ -43,6 +45,7 @@ services:
     environment:
       port: 8000
       GUESTBOOK_API_ADDR: haproxy:8000
+      IMAGE_SERVER_URI: https://image-server.asordk.synology.me
 
   haproxy:
     image: haproxytech/haproxy-alpine:2.4
@@ -106,19 +109,6 @@ services:
       - 27017:27017
     volumes:
       - mongo-data:/data/db
-
-  image-server:
-    image: nginx:1.27.2 
-    networks:
-      front-net:
-        ipv4_address: 172.50.50.7
-    ports:
-      - 8081:80
-    restart: always
-    volumes:
-      - ./image-server/images:/usr/share/nginx/html/images
-      - ./image-server/nginx.conf:/etc/nginx/nginx.conf
-      - ./image-server/logs:/var/log/nginx
 
 networks:
   front-net:
