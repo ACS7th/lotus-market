@@ -57,4 +57,5 @@ public class MessagesApiController {
 
         return ResponseEntity.ok().build();
     }
+
 }

@@ -30,6 +30,6 @@ public class MessagesService {
     public Messages updateMessagesTitle(String id, String newTitle) {
         Query query = new Query(Criteria.where("_id").is(id));
         Update update = new Update().set("title", newTitle);
-        return mongoTemplate.findAndModify(query, update, Messages.class );
+        return mongoTemplate.findAndModify(query, update, Messages.class);
     }
 }
