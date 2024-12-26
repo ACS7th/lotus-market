@@ -1,0 +1,58 @@
+HELP.md
+.gradle
+build/
+!gradle/wrapper/gradle-wrapper.jar
+!**/src/main/**/build/
+!**/src/test/**/build/
+
+### STS ###
+.apt_generated
+.classpath
+.factorypath
+.project
+.settings
+.springBeans
+.sts4-cache
+bin/
+!**/src/main/**/bin/
+!**/src/test/**/bin/
+
+### IntelliJ IDEA ###
+.idea
+*.iws
+*.iml
+*.ipr
+out/
+!**/src/main/**/out/
+!**/src/test/**/out/
+
+### NetBeans ###
+/nbproject/private/
+/nbbuild/
+/dist/
+/nbdist/
+/.nb-gradle/
+
+### VS Code ###
+.vscode/
+
+### member secure info ###
+sql-scripts/*
+
+### env ###
+../.env
+
+### react buildfiles ###
+/src/main/resources/static/**
+
+### json-key ###
+/src/main/resources/*.json
+
+### node ###
+/node_modules
+package-lock.json
+/build
+.vscode
+.eslintcache
+.env
+/nginx/*.pem
