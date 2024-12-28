@@ -22,7 +22,8 @@ public class Post {
     private String id;
     private String title;
     private String content;
-    private Date date;
     private String item;
     private String imageUrl;
+    private Date purchaseDate;
+    private Date timestamp;
 }

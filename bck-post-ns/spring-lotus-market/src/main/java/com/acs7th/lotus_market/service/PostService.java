@@ -17,17 +17,13 @@ public class PostService {
     private PostRepository postRepository;
 
     public List<Post> getAllPosts() {
-        return postRepository.findAll(Sort.by(Sort.Direction.DESC, "id"));
+        return postRepository.findAll(Sort.by(Sort.Direction.DESC, "timestamp"));
     }
 
     public void createPost(Post post) {
-        if (post.getTitle() == null || post.getContent() == null || post.getDate() == null 
+        if (post.getTitle() == null || post.getContent() == null || post.getPurchaseDate() == null 
             || post.getItem() == null) {
             throw new IllegalArgumentException("title, content, date, item은 필수 항목입니다.");
-        }
-
-        if (post.getDate() == null) {
-            post.setDate(new Date());
         }
 
         postRepository.save(post);

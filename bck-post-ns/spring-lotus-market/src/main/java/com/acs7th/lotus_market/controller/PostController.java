@@ -62,9 +62,10 @@ public class PostController {
             Post newPost = Post.builder()
                     .title(title)
                     .content(content)
-                    .date(purchaseDate)
+                    .purchaseDate(purchaseDate)
                     .item(item)
                     .imageUrl(storageService.uploadToCloudStorage(imageFile)) // image upload
+                    .timestamp(new Date())
                     .build();
 
             postService.createPost(newPost);
