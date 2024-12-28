@@ -1,0 +1,25 @@
+spring:
+  application:
+    name: lotus-market
+
+  data:
+    mongodb:
+      # uri: ${GUESTBOOK_DB_ADDR:mongodb://localhost:27017/lotus-db}
+      uri: mongodb://kevin:k8spass#@localhost:27017/lotus-db
+
+server:
+  port: ${PORT:8080}
+
+# porperties 주입
+file:
+  upload:
+    dir: uploads
+
+logging:
+  level:
+    org:
+      springframework:
+        data:
+          mongodb:
+            core:
+              DEBUG
