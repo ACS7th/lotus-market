@@ -10,11 +10,6 @@ spring:
 server:
   port: ${PORT:8080}
 
-# porperties 주입
-file:
-  upload:
-    dir: uploads
-
 logging:
   level:
     org:
@@ -23,3 +18,7 @@ logging:
           mongodb:
             core:
               DEBUG
+
+gcp:
+  bucket:
+    name: k8s-kimjc

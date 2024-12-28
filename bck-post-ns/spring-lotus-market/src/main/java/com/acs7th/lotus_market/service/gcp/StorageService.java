@@ -1,32 +1,41 @@
 package com.acs7th.lotus_market.service.gcp;
 
-import java.io.IOException;
-import java.nio.file.*;
-
+import com.google.cloud.storage.BlobInfo;
+import com.google.cloud.storage.Storage;
+import com.google.cloud.storage.StorageOptions;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
+import java.util.UUID;
+
 @Service
 public class StorageService {
 
-    @Value("${file.upload.dir:uploads}")
-    private String uploadDir;
+    @Value("${gcp.bucket.name}")
+    private String bucketName; // GCS 버킷 이름
 
     public String uploadToCloudStorage(MultipartFile file) throws IOException {
         String imageUrl = null;
 
         if (file != null && !file.isEmpty()) {
+            // 고유 파일 이름 생성
             String originalFilename = StringUtils.cleanPath(file.getOriginalFilename());
-            Path uploadPath = Paths.get(uploadDir).toAbsolutePath().normalize();
+            String uniqueFilename = UUID.randomUUID() + "_" + originalFilename;
 
-            Files.createDirectories(uploadPath);
+            // GCS 클라이언트 생성
+            Storage storage = StorageOptions.getDefaultInstance().getService();
 
-            Path filePath = uploadPath.resolve(originalFilename);
-            Files.copy(file.getInputStream(), filePath, StandardCopyOption.REPLACE_EXISTING);
+            // GCS에 업로드
+            BlobInfo blobInfo = storage.create(
+                BlobInfo.newBuilder(bucketName, uniqueFilename).build(),
+                file.getInputStream()
+            );
 
-            imageUrl = "/uploads/" + originalFilename;
+            // 업로드된 파일 URL 반환
+            imageUrl = String.format("https://storage.googleapis.com/%s/%s", bucketName, uniqueFilename);
         }
 
         return imageUrl;
