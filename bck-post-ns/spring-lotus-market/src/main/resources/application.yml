@@ -4,11 +4,10 @@ spring:
 
   data:
     mongodb:
-      # uri: ${GUESTBOOK_DB_ADDR:mongodb://localhost:27017/lotus-db}
-      uri: mongodb://kevin:k8spass#@localhost:27017/lotus-db
+      uri: mongodb://${DB_USERNAME}:${DB_PASSWORD}@${DB_URL:localhost:27017}/lotus-db
 
 server:
-  port: ${PORT:8080}
+  port: 8765
 
 logging:
   level:
@@ -16,8 +15,7 @@ logging:
       springframework:
         data:
           mongodb:
-            core:
-              DEBUG
+            core: DEBUG
 
 gcp:
   bucket:
