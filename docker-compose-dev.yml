@@ -1,7 +1,8 @@
 services:
   backend:
+    image: dealim/lotus-market-spring:1.1
     build:
-      context: ./bck-post-ns/spring-lotus-market
+      context: ./back-ns/spring-lotus-market
       dockerfile: ./Dockerfile
     environment:
       - SPRING_PROFILES_ACTIVE=prod
@@ -18,6 +19,7 @@ services:
       - db
 
   db:
+    image: dealim/lotus-market-mongo:1.1
     build:
       context: ./db-ns
       dockerfile: ./Dockerfile
@@ -30,6 +32,7 @@ services:
       - "27017:27017"
 
   front:
+    image: dealim/lotus-market-next:1.1
     build:
       context: ./front-ns/next-app
       dockerfile: ./Dockerfile
