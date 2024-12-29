@@ -1,21 +1,43 @@
-services:
-  spring-app:
-    build:
-      context: ./bck-post-ns/spring-lotus-market/
-      dockerfile: Dockerfile
-    ports:
-      - "${LOTUS_DB_PORT}:${LOTUS_DB_PORT}" 
-    environment:
-      DB_USERNAME: "${DB_USERNAME}"
-      DB_PASSWORD: "${DB_PASSWORD}"
-      LOTUS_DB_URL: "next-app:27017"
+version: "3.9"
 
-  next-app:
+services:
+  backend:
     build:
-      context: .
-      dockerfile: Dockerfile
-    ports:
-      - "${EXPOSE_PORT}:${SERVER_PORT}" 
+      context: ./bck-post-ns/spring-lotus-market
+      dockerfile: ./Dockerfile
     environment:
-      SPRING_PROFILES_ACTIVE: "${SPRING_PROFILES_ACTIVE}"
-      SERVER_PORT: "${SERVER_PORT}"
+      - SPRING_PROFILES_ACTIVE=prod
+      - DB_USERNAME=${DB_USERNAME}
+      - DB_PASSWORD=${DB_PASSWORD}
+      - DB_URL=db:27017
+      - GOOGLE_APPLICATION_CREDENTIALS=/app/key.json
+      - GOOGLE_CLOUD_PROJECT=k8s-kimjc
+    volumes:
+      - ~/.config/gcloud/application_default_credentials.json:/app/key.json
+    ports:
+      - "8765:8765"
+    depends_on:
+      - db
+
+  db:
+    build:
+      context: ./db-ns
+      dockerfile: ./Dockerfile
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=${MONGO_INITDB_ROOT_USERNAME}
+      - MONGO_INITDB_ROOT_PASSWORD=${MONGO_INITDB_ROOT_PASSWORD}
+    volumes:
+      - ./db-ns/init-mongo.js:/docker-entrypoint-initdb.d/init-mongo.js
+    ports:
+      - "27017:27017"
+
+  front:
+    build:
+      context: ./front-ns/next-app
+      dockerfile: ./Dockerfile
+    environment:
+      - API_SERVER_URL=backend:8765 
+    ports:
+      - "3000:3000"
+    depends_on:
+      - backend
