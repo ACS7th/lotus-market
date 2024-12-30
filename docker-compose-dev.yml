@@ -11,12 +11,14 @@ services:
       - DB_URL=db:27017
       - GOOGLE_APPLICATION_CREDENTIALS=/app/key.json
       - GOOGLE_CLOUD_PROJECT=k8s-kimjc
+      - ES_URL=elasticsearch
     volumes:
       - ~/.config/gcloud/application_default_credentials.json:/app/key.json
     ports:
       - "8765:8765"
     depends_on:
-      - db
+      elasticsearch:
+        condition: service_healthy
 
   db:
     # image: dealim/lotus-market-mongo:1.2
@@ -43,15 +45,24 @@ services:
     depends_on:
       - backend
 
-  es:
+  elasticsearch:
     image: docker.elastic.co/elasticsearch/elasticsearch:8.10.2
     container_name: elasticsearch
     environment:
       - discovery.type=single-node
       - "xpack.security.enabled=false"
+      - ES_JAVA_OPTS=-Xms4g -Xmx4g
     ports:
       - "9200:9200"
       - "9300:9300"
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:9200/_cat/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    volumes:
+      - ./elasticsearch_data:/usr/share/elasticsearch/data
+
 
   kibana:
     image: docker.elastic.co/kibana/kibana:8.10.2
@@ -61,4 +72,4 @@ services:
     environment:
       - ELASTICSEARCH_HOSTS=http://elasticsearch:9200
     depends_on:
-      - es
+      - elasticsearch

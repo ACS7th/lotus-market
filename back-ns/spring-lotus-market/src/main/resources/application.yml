@@ -9,22 +9,26 @@ spring:
     name: lotus-market
 
   data:
+    elasticsearch:
+      url: ${ES_URL:localhost}
     mongodb:
       uri: mongodb://${DB_USERNAME}:${DB_PASSWORD}@${DB_URL:localhost:27017}/lotus-db?authSource=lotus-db
+
 
 server:
   port: 8765
 
-logging:
-  level:
-    org:
-      mongodb:
-        driver: TRACE
-      springframework:
-        data:
-          mongodb:
-            core: DEBUG
+# logging:
+#   level:
+#     org:
+#       mongodb:
+#         driver: TRACE
+#       springframework:
+#         data:
+#           mongodb:
+#             core: DEBUG
 
 gcp:
   bucket:
     name: k8s-kimjc
+

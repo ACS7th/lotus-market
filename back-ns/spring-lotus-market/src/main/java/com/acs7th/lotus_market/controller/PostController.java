@@ -40,15 +40,14 @@ public class PostController {
         }
     }
 
-    @PostMapping(consumes = {"multipart/form-data"})
+    @PostMapping(consumes = { "multipart/form-data" })
     public ResponseEntity<?> createPost(
             @RequestParam("title") String title,
             @RequestParam("content") String content,
             @RequestParam("purchaseDate") String dateStr,
             @RequestParam("item") String item,
-            @RequestParam(value = "images", required = false) MultipartFile imageFile
-    ) {
-        log.info("post post");
+            @RequestParam(value = "images", required = false) MultipartFile imageFile) {
+        log.info("post new post...");
 
         try {
             Date purchaseDate;
@@ -87,4 +86,19 @@ public class PostController {
                     .body("{\"error\": \"등록 실패\", \"details\": \"" + e.getMessage() + "\"}");
         }
     }
+
+    @GetMapping("/search")
+    public ResponseEntity<?> searchPosts(@RequestParam("item") String item) {
+        log.info("search posts by item: {}", item);
+        try {
+            return ResponseEntity.ok(postService.searchPostsByItemFromElasticsearch(item));
+        } catch (Exception e) {
+            log.error("검색 실패");
+            log.error(e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("{\"error\": \"검색 실패\", \"details\": \"" + e.getMessage() + "\"}");
+        }
+    }
+    
+
 }
