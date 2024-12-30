@@ -22,7 +22,7 @@ spec:
           - key: key.json
             path: key.json
       containers:
-      - image: dealim/lotus-market-spring:1.0
+      - image: dealim/lotus-market-spring:1.8
         name: lotus-market-next
         ports:
         - containerPort: 8765

@@ -18,7 +18,7 @@ spec:
         app: next
     spec:
       containers:
-      - image: dealim/lotus-market-next:1.0
+      - image: dealim/lotus-market-next:1.4
         name: lotus-market-next
         ports:
         - containerPort: 3000
@@ -34,7 +34,7 @@ status: {}
 
 apiVersion: v1
 data:
-  API_SERVER_URL: spring:27017
+  API_SERVER_URL: spring-svc:8765
 kind: ConfigMap
 metadata:
   creationTimestamp: null
@@ -48,7 +48,7 @@ metadata:
   creationTimestamp: null
   labels:
     app: next
-  name: next-deploy
+  name: next-svc
 spec:
   ports:
   - port: 3000
