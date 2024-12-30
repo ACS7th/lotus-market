@@ -1,6 +1,6 @@
 services:
   backend:
-    image: dealim/lotus-market-spring:1.6
+    # image: dealim/lotus-market-spring:1.6
     build:
       context: ./back-ns/spring-lotus-market
       dockerfile: ./Dockerfile
@@ -19,7 +19,7 @@ services:
       - db
 
   db:
-    image: dealim/lotus-market-mongo:1.2
+    # image: dealim/lotus-market-mongo:1.2
     build:
       context: ./db-ns
       dockerfile: ./Dockerfile
@@ -32,7 +32,7 @@ services:
       - "27017:27017"
 
   front:
-    image: dealim/lotus-market-next:1.4
+    # image: dealim/lotus-market-next:1.4
     build:
       context: ./front-ns/next-app
       dockerfile: ./Dockerfile
@@ -42,3 +42,23 @@ services:
       - "3000:3000"
     depends_on:
       - backend
+
+  es:
+    image: docker.elastic.co/elasticsearch/elasticsearch:8.10.2
+    container_name: elasticsearch
+    environment:
+      - discovery.type=single-node
+      - "xpack.security.enabled=false"
+    ports:
+      - "9200:9200"
+      - "9300:9300"
+
+  kibana:
+    image: docker.elastic.co/kibana/kibana:8.10.2
+    container_name: kibana
+    ports:
+      - "5601:5601"
+    environment:
+      - ELASTICSEARCH_HOSTS=http://elasticsearch:9200
+    depends_on:
+      - es
