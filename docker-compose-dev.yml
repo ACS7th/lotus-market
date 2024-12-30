@@ -1,6 +1,6 @@
 services:
   backend:
-    image: dealim/lotus-market-spring:1.1
+    image: dealim/lotus-market-spring:1.6
     build:
       context: ./back-ns/spring-lotus-market
       dockerfile: ./Dockerfile
@@ -19,7 +19,7 @@ services:
       - db
 
   db:
-    image: dealim/lotus-market-mongo:1.1
+    image: dealim/lotus-market-mongo:1.2
     build:
       context: ./db-ns
       dockerfile: ./Dockerfile
@@ -32,7 +32,7 @@ services:
       - "27017:27017"
 
   front:
-    image: dealim/lotus-market-next:1.1
+    image: dealim/lotus-market-next:1.4
     build:
       context: ./front-ns/next-app
       dockerfile: ./Dockerfile

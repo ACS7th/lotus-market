@@ -82,6 +82,7 @@ public class PostController {
                     .body("{\"error\": \"파일 업로드 실패.\", \"details\": \"" + e.getMessage() + "\"}");
         } catch (Exception e) {
             log.error("응답 실패");
+            log.error(e.getMessage());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body("{\"error\": \"등록 실패\", \"details\": \"" + e.getMessage() + "\"}");
         }
