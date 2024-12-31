@@ -1,0 +1,44 @@
+apiVersion: v1
+items:
+- apiVersion: storage.k8s.io/v1
+  kind: StorageClass
+  metadata:
+    annotations:
+      cas.openebs.io/config: "#hostpath type will create a PV by \n# creating a sub-directory
+        under the\n# BASEPATH provided below.\n- name: StorageType\n  value: \"hostpath\"\n#Specify
+        the location (directory) where\n# where PV(volume) data will be saved. \n#
+        A sub-directory with pv-name will be \n# created. When the volume is deleted,
+        \n# the PV sub-directory will be deleted.\n#Default value is /var/openebs/local\n-
+        name: BasePath\n  value: \"/var/openebs/local/\"\n"
+      kubectl.kubernetes.io/last-applied-configuration: |
+        {"apiVersion":"storage.k8s.io/v1","kind":"StorageClass","metadata":{"annotations":{"cas.openebs.io/config":"#hostpath type will create a PV by \n# creating a sub-directory under the\n# BASEPATH provided below.\n- name: StorageType\n  value: \"hostpath\"\n#Specify the location (directory) where\n# where PV(volume) data will be saved. \n# A sub-directory with pv-name will be \n# created. When the volume is deleted, \n# the PV sub-directory will be deleted.\n#Default value is /var/openebs/local\n- name: BasePath\n  value: \"/var/openebs/local/\"\n","openebs.io/cas-type":"local"},"name":"openebs-hostpath"},"provisioner":"openebs.io/local","reclaimPolicy":"Delete","volumeBindingMode":"WaitForFirstConsumer"}
+      openebs.io/cas-type: local
+    creationTimestamp: "2024-12-28T05:45:44Z"
+    name: openebs-hostpath
+    resourceVersion: "777421"
+    uid: 485e7af4-028d-4c57-a6ea-34947f73fcfe
+  provisioner: openebs.io/local
+  reclaimPolicy: Delete
+  volumeBindingMode: WaitForFirstConsumer
+- apiVersion: storage.k8s.io/v1
+  kind: StorageClass
+  metadata:
+    annotations:
+      cas.openebs.io/config: |
+        #device type will create a PV by
+        # issuing a BDC and will extract the path
+        # values from the associated BD.
+        - name: StorageType
+          value: "device"
+      kubectl.kubernetes.io/last-applied-configuration: |
+        {"apiVersion":"storage.k8s.io/v1","kind":"StorageClass","metadata":{"annotations":{"cas.openebs.io/config":"#device type will create a PV by\n# issuing a BDC and will extract the path\n# values from the associated BD.\n- name: StorageType\n  value: \"device\"\n","openebs.io/cas-type":"local"},"name":"openebs-device"},"provisioner":"openebs.io/local","reclaimPolicy":"Delete","volumeBindingMode":"WaitForFirstConsumer"}
+      openebs.io/cas-type: local
+    creationTimestamp: "2024-12-28T05:45:44Z"
+    name: openebs-device
+    resourceVersion: "777422"
+    uid: a0d607ec-0fc2-44b1-9957-7c402309256c
+  provisioner: openebs.io/local
+  reclaimPolicy: Delete
+  volumeBindingMode: WaitForFirstConsumer
+kind: List
+metadata: {}

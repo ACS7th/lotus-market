@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: back-dev-svc
+  namespace: back-dev
+  labels:
+    app: back-dev
+spec:
+  selector:
+    app: back-dev
+  ports:
+    - protocol: TCP
+      port: 8765
+      targetPort: 8765
