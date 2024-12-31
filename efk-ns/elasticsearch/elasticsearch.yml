@@ -1,0 +1,3 @@
+cluster.routing.allocation.disk.watermark.low: 95%
+cluster.routing.allocation.disk.watermark.high: 98%
+cluster.info.update.interval: 1m

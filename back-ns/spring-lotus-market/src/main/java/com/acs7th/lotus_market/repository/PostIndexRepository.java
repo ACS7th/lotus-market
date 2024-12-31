@@ -10,4 +10,3 @@ public interface PostIndexRepository extends ElasticsearchRepository<PostIndex, 
     List<PostIndex> findByTitleContaining(String title);
     List<PostIndex> findByItemContainingIgnoreCase(String item);
 }
-

@@ -57,7 +57,6 @@ public class PostController {
                 purchaseDate = new Date();
             }
 
-            // Post 객체 생성
             Post newPost = Post.builder()
                     .title(title)
                     .content(content)
@@ -90,6 +89,7 @@ public class PostController {
     @GetMapping("/search")
     public ResponseEntity<?> searchPosts(@RequestParam("item") String item) {
         log.info("search posts by item: {}", item);
+
         try {
             return ResponseEntity.ok(postService.searchPostsByItemFromElasticsearch(item));
         } catch (Exception e) {
@@ -97,8 +97,7 @@ public class PostController {
             log.error(e.getMessage());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body("{\"error\": \"검색 실패\", \"details\": \"" + e.getMessage() + "\"}");
+
         }
     }
-    
-
 }
