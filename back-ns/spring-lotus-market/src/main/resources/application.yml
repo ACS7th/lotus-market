@@ -14,7 +14,6 @@ spring:
     mongodb:
       uri: mongodb://${DB_USERNAME}:${DB_PASSWORD}@${DB_URL:localhost:27017}/lotus-db?authSource=lotus-db
 
-
 server:
   port: 8765
 
@@ -31,4 +30,3 @@ server:
 gcp:
   bucket:
     name: k8s-kimjc
-
