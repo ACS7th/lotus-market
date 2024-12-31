@@ -16,9 +16,6 @@ services:
       - ~/.config/gcloud/application_default_credentials.json:/app/key.json
     ports:
       - "8765:8765"
-    depends_on:
-      elasticsearch:
-        condition: service_healthy
 
   db:
     # image: dealim/lotus-market-mongo:1.2
