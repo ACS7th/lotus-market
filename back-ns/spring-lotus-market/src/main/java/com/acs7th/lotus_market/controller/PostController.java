@@ -91,7 +91,7 @@ public class PostController {
         log.info("search posts by item: {}", item);
 
         try {
-            return ResponseEntity.ok(postService.searchPostsByItemFromElasticsearch(item));
+            return ResponseEntity.ok(postService.getPostsContainingItem(item));
         } catch (Exception e) {
             log.error("검색 실패");
             log.error(e.getMessage());

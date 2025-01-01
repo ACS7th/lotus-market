@@ -9,8 +9,6 @@ spring:
     name: lotus-market
 
   data:
-    elasticsearch:
-      url: ${ES_URL:localhost}
     mongodb:
       uri: mongodb://${DB_USERNAME}:${DB_PASSWORD}@${DB_URL:localhost:27017}/lotus-db?authSource=lotus-db
 
