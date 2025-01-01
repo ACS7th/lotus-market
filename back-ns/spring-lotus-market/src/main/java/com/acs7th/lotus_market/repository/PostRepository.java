@@ -9,5 +9,5 @@ import com.acs7th.lotus_market.model.Post;
 
 @Repository
 public interface PostRepository extends MongoRepository<Post, String> {
-    List<Post> findByItemContaining(String item);
+    List<Post> findByItemContainingOrderByTimestampDesc(String item);
 }

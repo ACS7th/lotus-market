@@ -39,7 +39,7 @@ public class PostService {
     }
 
     public List<Post> getPostsContainingItem(String item) {
-        return postRepository.findByItemContaining(item);
+        return postRepository.findByItemContainingOrderByTimestampDesc(item);
     }
 
 }
