@@ -2,24 +2,13 @@ apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
 metadata:
   creationTimestamp: null
-  name: monitoring-clusterrole
+  name: get-pvc-clusterrole
 rules:
 - apiGroups:
   - ""
   resources:
-  - pods
-  - services
-  - nodes
+  - persistentvolumeclaims
   verbs:
-  - list
   - get
-  - watch
-- apiGroups:
-  - apps
-  resources:
-  - deployments
-  - statefulsets
-  verbs:
   - list
-  - get
   - watch

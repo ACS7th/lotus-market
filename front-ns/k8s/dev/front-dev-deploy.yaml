@@ -25,7 +25,7 @@ spec:
             cpu: "1"
             memory: "512Mi"
           limits:
-            cpu: "2"
+            cpu: "1"
             memory: "1Gi"
         env:
         - name: API_SERVER_URL

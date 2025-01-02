@@ -23,7 +23,7 @@ spec:
           - key: key.json
             path: key.json
       containers:
-      - image: dealim/lotus-market-spring:1.8
+      - image: dealim/lotus-market-spring:2.0
         name: back-dev-container
         ports:
         - containerPort: 8765
@@ -49,7 +49,7 @@ spec:
         resources:
           requests:
             cpu: "1"
-            memory: "512Mi"
-          limits:
-            cpu: "2"
             memory: "1Gi"
+          limits:
+            cpu: "1"
+            memory: "2Gi"

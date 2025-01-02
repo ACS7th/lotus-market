@@ -24,7 +24,7 @@ spec:
             path: key.json
       containers:
       - name: back-ops-container
-        image: dealim/lotus-market-spring:1.8
+        image: dealim/lotus-market-spring:2.0
         ports:
         - containerPort: 8765
         volumeMounts:
@@ -52,7 +52,7 @@ spec:
             memory: "2Gi"
           limits:
             cpu: "4"
-            memory: "8Gi"
+            memory: "4Gi"
 ---
 apiVersion: autoscaling/v2
 kind: HorizontalPodAutoscaler

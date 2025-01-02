@@ -5,8 +5,13 @@ metadata:
   namespace: db-dev
 spec:
   accessModes:
-    - ReadWriteOnce
+  - ReadWriteOnce
   resources:
     requests:
       storage: 4Gi
   storageClassName: longhorn
+  dataSource:
+    name: test-snapshot
+    kind: VolumeSnapshot
+    apiGroup: snapshot.storage.k8s.io
+

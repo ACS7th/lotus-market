@@ -17,16 +17,16 @@ spec:
     spec:
       containers:
       - name: front-ops-container
-        image: dealim/lotus-market-next:1.4
+        image: dealim/lotus-market-next:1.5
         ports:
         - containerPort: 3000
         resources:
           requests:
-            cpu: "2"
-            memory: "2Gi"
+            cpu: "1"
+            memory: "1Gi"
           limits:
-            cpu: "4"
-            memory: "8Gi"
+            cpu: "2"
+            memory: "3Gi"
         env:
         - name: API_SERVER_URL
           valueFrom:

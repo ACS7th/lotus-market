@@ -22,8 +22,8 @@ spec:
       cpu: "2"
       memory: "2Gi"
     default:
-      cpu: "4"
-      memory: "8Gi"
+      cpu: "2"
+      memory: "2Gi"
     max:
       cpu: "4"
       memory: "8Gi"

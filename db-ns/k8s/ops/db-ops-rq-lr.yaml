@@ -5,10 +5,10 @@ metadata:
   namespace: db-ops
 spec:
   hard:
-    requests.cpu: "1"
-    requests.memory: "1Gi"
+    requests.cpu: "2"
+    requests.memory: "2Gi"
     limits.cpu: "2"
-    limits.memory: "4Gi"
+    limits.memory: "3Gi"
 ---
 apiVersion: v1
 kind: LimitRange
@@ -19,11 +19,11 @@ spec:
   limits:
   - type: Container
     defaultRequest:
-      cpu: "1"
-      memory: "1Gi"
+      cpu: "2"
+      memory: "2Gi"
     default:
       cpu: "2"
-      memory: "4Gi"
+      memory: "3Gi"
     max:
       cpu: "2"
-      memory: "4Gi"
+      memory: "3Gi"
