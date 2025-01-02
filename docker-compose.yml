@@ -1,6 +1,6 @@
 services:
   backend:
-    # image: dealim/lotus-market-spring:1.9
+    image: dealim/lotus-market-spring:1.9
     build:
       context: ./back-ns/spring-lotus-market
       dockerfile: ./Dockerfile-dev
@@ -14,7 +14,6 @@ services:
     volumes:
       - ~/.config/gcloud/application_default_credentials.json:/app/key.json
       - ./back-ns/spring-lotus-market/src:/app/src
-
     ports:
       - "8765:8765"
     depends_on:
