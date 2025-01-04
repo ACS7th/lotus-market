@@ -1,0 +1,16 @@
+spring:
+  devtools:
+    restart:
+      enabled: true
+    livereload:
+      enabled: true
+
+# logging:
+#   level:
+#     org:
+#       mongodb:
+#         driver: TRACE
+#       springframework:
+#         data:
+#           mongodb:
+#             core: DEBUG

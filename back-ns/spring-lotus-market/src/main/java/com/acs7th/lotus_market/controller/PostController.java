@@ -11,6 +11,7 @@ import com.acs7th.lotus_market.model.Post;
 import com.acs7th.lotus_market.service.PostService;
 import com.acs7th.lotus_market.service.gcp.StorageService;
 
+import io.micrometer.core.instrument.MeterRegistry;
 import lombok.extern.slf4j.Slf4j;
 
 import java.io.IOException;
@@ -22,15 +23,24 @@ import java.util.Date;
 @Slf4j
 public class PostController {
 
-    @Autowired
-    private PostService postService;
+    private final PostService postService;        
+    private final StorageService storageService;  
+    private final MeterRegistry meterRegistry;    
 
     @Autowired
-    private StorageService storageService;
+    public PostController(PostService postService, StorageService storageService, MeterRegistry meterRegistry) {
+        this.postService = postService;
+        this.storageService = storageService;
+        this.meterRegistry = meterRegistry;
+    }
 
     @GetMapping
     public ResponseEntity<?> getAllPosts() {
         log.info("get all posts");
+
+        // GET 요청 수 기록
+        meterRegistry.counter("api_post_requests", "method", "GET").increment();
+
         try {
             return ResponseEntity.ok(postService.getAllPosts());
         } catch (Exception e) {
@@ -40,15 +50,17 @@ public class PostController {
         }
     }
 
-    @PostMapping(consumes = {"multipart/form-data"})
+    @PostMapping(consumes = { "multipart/form-data" })
     public ResponseEntity<?> createPost(
             @RequestParam("title") String title,
             @RequestParam("content") String content,
             @RequestParam("purchaseDate") String dateStr,
             @RequestParam("item") String item,
-            @RequestParam(value = "images", required = false) MultipartFile imageFile
-    ) {
-        log.info("post post");
+            @RequestParam(value = "images", required = false) MultipartFile imageFile) {
+        log.info("post new post...");
+
+        // POST 요청 수 기록
+        meterRegistry.counter("api_post_requests", "method", "POST").increment();
 
         try {
             Date purchaseDate;
@@ -58,7 +70,6 @@ public class PostController {
                 purchaseDate = new Date();
             }
 
-            // Post 객체 생성
             Post newPost = Post.builder()
                     .title(title)
                     .content(content)
@@ -85,6 +96,23 @@ public class PostController {
             log.error(e.getMessage());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body("{\"error\": \"등록 실패\", \"details\": \"" + e.getMessage() + "\"}");
+        }
+    }
+
+    @GetMapping("/search")
+    public ResponseEntity<?> searchPosts(@RequestParam("item") String item) {
+        log.info("search posts by item: {}", item);
+
+        // /search 요청 수 기록
+        meterRegistry.counter("api_post_search_requests").increment();
+
+        try {
+            return ResponseEntity.ok(postService.getPostsContainingItem(item));
+        } catch (Exception e) {
+            log.error("검색 실패");
+            log.error(e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("{\"error\": \"검색 실패\", \"details\": \"" + e.getMessage() + "\"}");
         }
     }
 }
