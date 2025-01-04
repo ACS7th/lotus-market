@@ -31,7 +31,8 @@ public class StorageService {
                 file.getInputStream()
             );
 
-            imageUrl = String.format("https://kimjichang.site/%s", uniqueFilename);
+            imageUrl = String.format("https://storage.googleapis.com/%s/%s", bucketName, uniqueFilename);
+
         }
 
         return imageUrl;

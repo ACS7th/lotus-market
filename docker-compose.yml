@@ -1,11 +1,11 @@
 services:
   backend:
-    image: dealim/lotus-market-spring:1.9
+    image: dealim/lotus-market-spring:2.0
     build:
       context: ./back-ns/spring-lotus-market
-      dockerfile: ./Dockerfile-dev
+      dockerfile: ./Dockerfile
     environment:
-      - SPRING_PROFILES_ACTIVE=dev
+      - SPRING_PROFILES_ACTIVE=prod
       - DB_USERNAME=${DB_USERNAME}
       - DB_PASSWORD=${DB_PASSWORD}
       - DB_URL=db:27017
@@ -20,7 +20,7 @@ services:
       - db
 
   db:
-    image: dealim/lotus-market-mongo:1.2
+    image: dealim/lotus-market-mongo:1.3
     build:
       context: ./db-ns
       dockerfile: ./Dockerfile
