@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: db-ops-svc
+  namespace: db-ops
+  labels:
+    app: db-ops
+spec:
+  selector:
+    app: db-ops
+  ports:
+    - protocol: TCP
+      port: 27017
+      targetPort: 27017

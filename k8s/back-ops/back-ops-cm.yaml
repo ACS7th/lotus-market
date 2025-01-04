@@ -1,0 +1,10 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: back-ops-cm
+  namespace: back-ops
+data:
+  DB_URL: db-ops-svc.db-ops.svc.cluster.local:27017
+  GOOGLE_APPLICATION_CREDENTIALS: /app/key.json
+  GOOGLE_CLOUD_PROJECT: k8s-kimjc
+  SPRING_PROFILES_ACTIVE: prod

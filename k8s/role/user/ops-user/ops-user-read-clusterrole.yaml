@@ -1,0 +1,14 @@
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  creationTimestamp: null
+  name: ops-user-read-clusterrole
+rules:
+- apiGroups:
+  - ""
+  resources:
+  - '*'
+  verbs:
+  - get
+  - list
+  - watch

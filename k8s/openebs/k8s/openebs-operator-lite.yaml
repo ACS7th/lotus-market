@@ -1,0 +1,1284 @@
+apiVersion: v1
+items:
+- apiVersion: v1
+  kind: Namespace
+  metadata:
+    annotations:
+      kubectl.kubernetes.io/last-applied-configuration: |
+        {"apiVersion":"v1","kind":"Namespace","metadata":{"annotations":{},"name":"openebs"}}
+    creationTimestamp: "2024-12-28T05:45:24Z"
+    labels:
+      kubernetes.io/metadata.name: openebs
+    name: openebs
+    resourceVersion: "777275"
+    uid: bf880627-2e4c-4413-96a3-fdff2ddf9cbd
+  spec:
+    finalizers:
+    - kubernetes
+  status:
+    phase: Active
+- apiVersion: v1
+  kind: ServiceAccount
+  metadata:
+    annotations:
+      kubectl.kubernetes.io/last-applied-configuration: |
+        {"apiVersion":"v1","kind":"ServiceAccount","metadata":{"annotations":{},"name":"openebs-maya-operator","namespace":"openebs"}}
+    creationTimestamp: "2024-12-28T05:45:34Z"
+    name: openebs-maya-operator
+    namespace: openebs
+    resourceVersion: "777276"
+    uid: ab9aaf07-5208-4c39-b6d0-c0f8227e85af
+- apiVersion: rbac.authorization.k8s.io/v1
+  kind: ClusterRole
+  metadata:
+    annotations:
+      kubectl.kubernetes.io/last-applied-configuration: |
+        {"apiVersion":"rbac.authorization.k8s.io/v1","kind":"ClusterRole","metadata":{"annotations":{},"name":"openebs-maya-operator"},"rules":[{"apiGroups":["*"],"resources":["nodes","nodes/proxy"],"verbs":["*"]},{"apiGroups":["*"],"resources":["namespaces","services","pods","pods/exec","deployments","deployments/finalizers","replicationcontrollers","replicasets","events","endpoints","configmaps","secrets","jobs","cronjobs"],"verbs":["*"]},{"apiGroups":["*"],"resources":["statefulsets","daemonsets"],"verbs":["*"]},{"apiGroups":["*"],"resources":["resourcequotas","limitranges"],"verbs":["list","watch"]},{"apiGroups":["*"],"resources":["ingresses","horizontalpodautoscalers","verticalpodautoscalers","poddisruptionbudgets","certificatesigningrequests"],"verbs":["list","watch"]},{"apiGroups":["*"],"resources":["storageclasses","persistentvolumeclaims","persistentvolumes"],"verbs":["*"]},{"apiGroups":["apiextensions.k8s.io"],"resources":["customresourcedefinitions"],"verbs":["get","list","create","update","delete","patch"]},{"apiGroups":["openebs.io"],"resources":["*"],"verbs":["*"]},{"apiGroups":["coordination.k8s.io"],"resources":["leases"],"verbs":["get","create","update"]},{"nonResourceURLs":["/metrics"],"verbs":["get"]}]}
+    creationTimestamp: "2024-12-28T05:45:34Z"
+    name: openebs-maya-operator
+    resourceVersion: "777277"
+    uid: 2a1890e9-d1e1-4247-a5c9-3a821d2f7acf
+  rules:
+  - apiGroups:
+    - '*'
+    resources:
+    - nodes
+    - nodes/proxy
+    verbs:
+    - '*'
+  - apiGroups:
+    - '*'
+    resources:
+    - namespaces
+    - services
+    - pods
+    - pods/exec
+    - deployments
+    - deployments/finalizers
+    - replicationcontrollers
+    - replicasets
+    - events
+    - endpoints
+    - configmaps
+    - secrets
+    - jobs
+    - cronjobs
+    verbs:
+    - '*'
+  - apiGroups:
+    - '*'
+    resources:
+    - statefulsets
+    - daemonsets
+    verbs:
+    - '*'
+  - apiGroups:
+    - '*'
+    resources:
+    - resourcequotas
+    - limitranges
+    verbs:
+    - list
+    - watch
+  - apiGroups:
+    - '*'
+    resources:
+    - ingresses
+    - horizontalpodautoscalers
+    - verticalpodautoscalers
+    - poddisruptionbudgets
+    - certificatesigningrequests
+    verbs:
+    - list
+    - watch
+  - apiGroups:
+    - '*'
+    resources:
+    - storageclasses
+    - persistentvolumeclaims
+    - persistentvolumes
+    verbs:
+    - '*'
+  - apiGroups:
+    - apiextensions.k8s.io
+    resources:
+    - customresourcedefinitions
+    verbs:
+    - get
+    - list
+    - create
+    - update
+    - delete
+    - patch
+  - apiGroups:
+    - openebs.io
+    resources:
+    - '*'
+    verbs:
+    - '*'
+  - apiGroups:
+    - coordination.k8s.io
+    resources:
+    - leases
+    verbs:
+    - get
+    - create
+    - update
+  - nonResourceURLs:
+    - /metrics
+    verbs:
+    - get
+- apiVersion: rbac.authorization.k8s.io/v1
+  kind: ClusterRoleBinding
+  metadata:
+    annotations:
+      kubectl.kubernetes.io/last-applied-configuration: |
+        {"apiVersion":"rbac.authorization.k8s.io/v1","kind":"ClusterRoleBinding","metadata":{"annotations":{},"name":"openebs-maya-operator"},"roleRef":{"apiGroup":"rbac.authorization.k8s.io","kind":"ClusterRole","name":"openebs-maya-operator"},"subjects":[{"kind":"ServiceAccount","name":"openebs-maya-operator","namespace":"openebs"}]}
+    creationTimestamp: "2024-12-28T05:45:34Z"
+    name: openebs-maya-operator
+    resourceVersion: "777278"
+    uid: 5d0a3856-e539-4c97-8e02-fc00b9cbaf6b
+  roleRef:
+    apiGroup: rbac.authorization.k8s.io
+    kind: ClusterRole
+    name: openebs-maya-operator
+  subjects:
+  - kind: ServiceAccount
+    name: openebs-maya-operator
+    namespace: openebs
+- apiVersion: apiextensions.k8s.io/v1
+  kind: CustomResourceDefinition
+  metadata:
+    annotations:
+      controller-gen.kubebuilder.io/version: v0.5.0
+      kubectl.kubernetes.io/last-applied-configuration: |
+        {"apiVersion":"apiextensions.k8s.io/v1","kind":"CustomResourceDefinition","metadata":{"annotations":{"controller-gen.kubebuilder.io/version":"v0.5.0"},"creationTimestamp":null,"name":"blockdevices.openebs.io"},"spec":{"group":"openebs.io","names":{"kind":"BlockDevice","listKind":"BlockDeviceList","plural":"blockdevices","shortNames":["bd"],"singular":"blockdevice"},"scope":"Namespaced","versions":[{"additionalPrinterColumns":[{"jsonPath":".spec.nodeAttributes.nodeName","name":"NodeName","type":"string"},{"jsonPath":".spec.path","name":"Path","priority":1,"type":"string"},{"jsonPath":".spec.filesystem.fsType","name":"FSType","priority":1,"type":"string"},{"jsonPath":".spec.capacity.storage","name":"Size","type":"string"},{"jsonPath":".status.claimState","name":"ClaimState","type":"string"},{"jsonPath":".status.state","name":"Status","type":"string"},{"jsonPath":".metadata.creationTimestamp","name":"Age","type":"date"}],"name":"v1alpha1","schema":{"openAPIV3Schema":{"description":"BlockDevice is the Schema for the blockdevices API","properties":{"apiVersion":{"description":"APIVersion defines the versioned schema of this representation of an object. Servers should convert recognized schemas to the latest internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources","type":"string"},"kind":{"description":"Kind is a string value representing the REST resource this object represents. Servers may infer this from the endpoint the client submits requests to. Cannot be updated. In CamelCase. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds","type":"string"},"metadata":{"type":"object"},"spec":{"description":"DeviceSpec defines the properties and runtime status of a BlockDevice","properties":{"aggregateDevice":{"description":"AggregateDevice was intended to store the hierarchical information in cases of LVM. However this is currently not implemented and may need to be re-looked into for better design. To be deprecated","type":"string"},"capacity":{"description":"Capacity","properties":{"logicalSectorSize":{"description":"LogicalSectorSize is blockdevice logical-sector size in bytes","format":"int32","type":"integer"},"physicalSectorSize":{"description":"PhysicalSectorSize is blockdevice physical-Sector size in bytes","format":"int32","type":"integer"},"storage":{"description":"Storage is the blockdevice capacity in bytes","format":"int64","type":"integer"}},"required":["storage"],"type":"object"},"claimRef":{"description":"ClaimRef is the reference to the BDC which has claimed this BD","properties":{"apiVersion":{"description":"API version of the referent.","type":"string"},"fieldPath":{"description":"If referring to a piece of an object instead of an entire object, this string should contain a valid JSON/Go field access statement, such as desiredState.manifest.containers[2]. For example, if the object reference is to a container within a pod, this would take on a value like: \"spec.containers{name}\" (where \"name\" refers to the name of the container that triggered the event) or if no container name is specified \"spec.containers[2]\" (container with index 2 in this pod). This syntax is chosen only to have some well-defined way of referencing a part of an object. TODO: this design is not final and this field is subject to change in the future.","type":"string"},"kind":{"description":"Kind of the referent. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds","type":"string"},"name":{"description":"Name of the referent. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names","type":"string"},"namespace":{"description":"Namespace of the referent. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/namespaces/","type":"string"},"resourceVersion":{"description":"Specific resourceVersion to which this reference is made, if any. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#concurrency-control-and-consistency","type":"string"},"uid":{"description":"UID of the referent. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#uids","type":"string"}},"type":"object"},"details":{"description":"Details contain static attributes of BD like model,serial, and so forth","properties":{"compliance":{"description":"Compliance is standards/specifications version implemented by device firmware  such as SPC-1, SPC-2, etc","type":"string"},"deviceType":{"description":"DeviceType represents the type of device like sparse, disk, partition, lvm, crypt","enum":["disk","partition","sparse","loop","lvm","crypt","dm","mpath"],"type":"string"},"driveType":{"description":"DriveType is the type of backing drive, HDD/SSD","enum":["HDD","SSD","Unknown",""],"type":"string"},"firmwareRevision":{"description":"FirmwareRevision is the disk firmware revision","type":"string"},"hardwareSectorSize":{"description":"HardwareSectorSize is the hardware sector size in bytes","format":"int32","type":"integer"},"logicalBlockSize":{"description":"LogicalBlockSize is the logical block size in bytes reported by /sys/class/block/sda/queue/logical_block_size","format":"int32","type":"integer"},"model":{"description":"Model is model of disk","type":"string"},"physicalBlockSize":{"description":"PhysicalBlockSize is the physical block size in bytes reported by /sys/class/block/sda/queue/physical_block_size","format":"int32","type":"integer"},"serial":{"description":"Serial is serial number of disk","type":"string"},"vendor":{"description":"Vendor is vendor of disk","type":"string"}},"type":"object"},"devlinks":{"description":"DevLinks contains soft links of a block device like /dev/by-id/... /dev/by-uuid/...","items":{"description":"DeviceDevLink holds the mapping between type and links like by-id type or by-path type link","properties":{"kind":{"description":"Kind is the type of link like by-id or by-path.","enum":["by-id","by-path"],"type":"string"},"links":{"description":"Links are the soft links","items":{"type":"string"},"type":"array"}},"type":"object"},"type":"array"},"filesystem":{"description":"FileSystem contains mountpoint and filesystem type","properties":{"fsType":{"description":"Type represents the FileSystem type of the block device","type":"string"},"mountPoint":{"description":"MountPoint represents the mountpoint of the block device.","type":"string"}},"type":"object"},"nodeAttributes":{"description":"NodeAttributes has the details of the node on which BD is attached","properties":{"nodeName":{"description":"NodeName is the name of the Kubernetes node resource on which the device is attached","type":"string"}},"type":"object"},"parentDevice":{"description":"ParentDevice was intended to store the UUID of the parent Block Device as is the case for partitioned block devices. \n For example: /dev/sda is the parent for /dev/sda1 To be deprecated","type":"string"},"partitioned":{"description":"Partitioned represents if BlockDevice has partitions or not (Yes/No) Currently always default to No. To be deprecated","enum":["Yes","No"],"type":"string"},"path":{"description":"Path contain devpath (e.g. /dev/sdb)","type":"string"}},"required":["capacity","devlinks","nodeAttributes","path"],"type":"object"},"status":{"description":"DeviceStatus defines the observed state of BlockDevice","properties":{"claimState":{"description":"ClaimState represents the claim state of the block device","enum":["Claimed","Unclaimed","Released"],"type":"string"},"state":{"description":"State is the current state of the blockdevice (Active/Inactive/Unknown)","enum":["Active","Inactive","Unknown"],"type":"string"}},"required":["claimState","state"],"type":"object"}},"type":"object"}},"served":true,"storage":true,"subresources":{}}]},"status":{"acceptedNames":{"kind":"","plural":""},"conditions":[],"storedVersions":[]}}
+    creationTimestamp: "2024-12-28T05:45:34Z"
+    generation: 1
+    name: blockdevices.openebs.io
+    resourceVersion: "777284"
+    uid: b40d4c0d-8241-4c4e-9ad3-605496607d14
+  spec:
+    conversion:
+      strategy: None
+    group: openebs.io
+    names:
+      kind: BlockDevice
+      listKind: BlockDeviceList
+      plural: blockdevices
+      shortNames:
+      - bd
+      singular: blockdevice
+    scope: Namespaced
+    versions:
+    - additionalPrinterColumns:
+      - jsonPath: .spec.nodeAttributes.nodeName
+        name: NodeName
+        type: string
+      - jsonPath: .spec.path
+        name: Path
+        priority: 1
+        type: string
+      - jsonPath: .spec.filesystem.fsType
+        name: FSType
+        priority: 1
+        type: string
+      - jsonPath: .spec.capacity.storage
+        name: Size
+        type: string
+      - jsonPath: .status.claimState
+        name: ClaimState
+        type: string
+      - jsonPath: .status.state
+        name: Status
+        type: string
+      - jsonPath: .metadata.creationTimestamp
+        name: Age
+        type: date
+      name: v1alpha1
+      schema:
+        openAPIV3Schema:
+          description: BlockDevice is the Schema for the blockdevices API
+          properties:
+            apiVersion:
+              description: 'APIVersion defines the versioned schema of this representation
+                of an object. Servers should convert recognized schemas to the latest
+                internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources'
+              type: string
+            kind:
+              description: 'Kind is a string value representing the REST resource
+                this object represents. Servers may infer this from the endpoint the
+                client submits requests to. Cannot be updated. In CamelCase. More
+                info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds'
+              type: string
+            metadata:
+              type: object
+            spec:
+              description: DeviceSpec defines the properties and runtime status of
+                a BlockDevice
+              properties:
+                aggregateDevice:
+                  description: AggregateDevice was intended to store the hierarchical
+                    information in cases of LVM. However this is currently not implemented
+                    and may need to be re-looked into for better design. To be deprecated
+                  type: string
+                capacity:
+                  description: Capacity
+                  properties:
+                    logicalSectorSize:
+                      description: LogicalSectorSize is blockdevice logical-sector
+                        size in bytes
+                      format: int32
+                      type: integer
+                    physicalSectorSize:
+                      description: PhysicalSectorSize is blockdevice physical-Sector
+                        size in bytes
+                      format: int32
+                      type: integer
+                    storage:
+                      description: Storage is the blockdevice capacity in bytes
+                      format: int64
+                      type: integer
+                  required:
+                  - storage
+                  type: object
+                claimRef:
+                  description: ClaimRef is the reference to the BDC which has claimed
+                    this BD
+                  properties:
+                    apiVersion:
+                      description: API version of the referent.
+                      type: string
+                    fieldPath:
+                      description: 'If referring to a piece of an object instead of
+                        an entire object, this string should contain a valid JSON/Go
+                        field access statement, such as desiredState.manifest.containers[2].
+                        For example, if the object reference is to a container within
+                        a pod, this would take on a value like: "spec.containers{name}"
+                        (where "name" refers to the name of the container that triggered
+                        the event) or if no container name is specified "spec.containers[2]"
+                        (container with index 2 in this pod). This syntax is chosen
+                        only to have some well-defined way of referencing a part of
+                        an object. TODO: this design is not final and this field is
+                        subject to change in the future.'
+                      type: string
+                    kind:
+                      description: 'Kind of the referent. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds'
+                      type: string
+                    name:
+                      description: 'Name of the referent. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names'
+                      type: string
+                    namespace:
+                      description: 'Namespace of the referent. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/namespaces/'
+                      type: string
+                    resourceVersion:
+                      description: 'Specific resourceVersion to which this reference
+                        is made, if any. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#concurrency-control-and-consistency'
+                      type: string
+                    uid:
+                      description: 'UID of the referent. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#uids'
+                      type: string
+                  type: object
+                details:
+                  description: Details contain static attributes of BD like model,serial,
+                    and so forth
+                  properties:
+                    compliance:
+                      description: Compliance is standards/specifications version
+                        implemented by device firmware  such as SPC-1, SPC-2, etc
+                      type: string
+                    deviceType:
+                      description: DeviceType represents the type of device like sparse,
+                        disk, partition, lvm, crypt
+                      enum:
+                      - disk
+                      - partition
+                      - sparse
+                      - loop
+                      - lvm
+                      - crypt
+                      - dm
+                      - mpath
+                      type: string
+                    driveType:
+                      description: DriveType is the type of backing drive, HDD/SSD
+                      enum:
+                      - HDD
+                      - SSD
+                      - Unknown
+                      - ""
+                      type: string
+                    firmwareRevision:
+                      description: FirmwareRevision is the disk firmware revision
+                      type: string
+                    hardwareSectorSize:
+                      description: HardwareSectorSize is the hardware sector size
+                        in bytes
+                      format: int32
+                      type: integer
+                    logicalBlockSize:
+                      description: LogicalBlockSize is the logical block size in bytes
+                        reported by /sys/class/block/sda/queue/logical_block_size
+                      format: int32
+                      type: integer
+                    model:
+                      description: Model is model of disk
+                      type: string
+                    physicalBlockSize:
+                      description: PhysicalBlockSize is the physical block size in
+                        bytes reported by /sys/class/block/sda/queue/physical_block_size
+                      format: int32
+                      type: integer
+                    serial:
+                      description: Serial is serial number of disk
+                      type: string
+                    vendor:
+                      description: Vendor is vendor of disk
+                      type: string
+                  type: object
+                devlinks:
+                  description: DevLinks contains soft links of a block device like
+                    /dev/by-id/... /dev/by-uuid/...
+                  items:
+                    description: DeviceDevLink holds the mapping between type and
+                      links like by-id type or by-path type link
+                    properties:
+                      kind:
+                        description: Kind is the type of link like by-id or by-path.
+                        enum:
+                        - by-id
+                        - by-path
+                        type: string
+                      links:
+                        description: Links are the soft links
+                        items:
+                          type: string
+                        type: array
+                    type: object
+                  type: array
+                filesystem:
+                  description: FileSystem contains mountpoint and filesystem type
+                  properties:
+                    fsType:
+                      description: Type represents the FileSystem type of the block
+                        device
+                      type: string
+                    mountPoint:
+                      description: MountPoint represents the mountpoint of the block
+                        device.
+                      type: string
+                  type: object
+                nodeAttributes:
+                  description: NodeAttributes has the details of the node on which
+                    BD is attached
+                  properties:
+                    nodeName:
+                      description: NodeName is the name of the Kubernetes node resource
+                        on which the device is attached
+                      type: string
+                  type: object
+                parentDevice:
+                  description: "ParentDevice was intended to store the UUID of the
+                    parent Block Device as is the case for partitioned block devices.
+                    \n For example: /dev/sda is the parent for /dev/sda1 To be deprecated"
+                  type: string
+                partitioned:
+                  description: Partitioned represents if BlockDevice has partitions
+                    or not (Yes/No) Currently always default to No. To be deprecated
+                  enum:
+                  - "Yes"
+                  - "No"
+                  type: string
+                path:
+                  description: Path contain devpath (e.g. /dev/sdb)
+                  type: string
+              required:
+              - capacity
+              - devlinks
+              - nodeAttributes
+              - path
+              type: object
+            status:
+              description: DeviceStatus defines the observed state of BlockDevice
+              properties:
+                claimState:
+                  description: ClaimState represents the claim state of the block
+                    device
+                  enum:
+                  - Claimed
+                  - Unclaimed
+                  - Released
+                  type: string
+                state:
+                  description: State is the current state of the blockdevice (Active/Inactive/Unknown)
+                  enum:
+                  - Active
+                  - Inactive
+                  - Unknown
+                  type: string
+              required:
+              - claimState
+              - state
+              type: object
+          type: object
+      served: true
+      storage: true
+      subresources: {}
+  status:
+    acceptedNames:
+      kind: BlockDevice
+      listKind: BlockDeviceList
+      plural: blockdevices
+      shortNames:
+      - bd
+      singular: blockdevice
+    conditions:
+    - lastTransitionTime: "2024-12-28T05:45:34Z"
+      message: no conflicts found
+      reason: NoConflicts
+      status: "True"
+      type: NamesAccepted
+    - lastTransitionTime: "2024-12-28T05:45:34Z"
+      message: the initial names have been accepted
+      reason: InitialNamesAccepted
+      status: "True"
+      type: Established
+    storedVersions:
+    - v1alpha1
+- apiVersion: apiextensions.k8s.io/v1
+  kind: CustomResourceDefinition
+  metadata:
+    annotations:
+      controller-gen.kubebuilder.io/version: v0.5.0
+      kubectl.kubernetes.io/last-applied-configuration: |
+        {"apiVersion":"apiextensions.k8s.io/v1","kind":"CustomResourceDefinition","metadata":{"annotations":{"controller-gen.kubebuilder.io/version":"v0.5.0"},"creationTimestamp":null,"name":"blockdeviceclaims.openebs.io"},"spec":{"group":"openebs.io","names":{"kind":"BlockDeviceClaim","listKind":"BlockDeviceClaimList","plural":"blockdeviceclaims","shortNames":["bdc"],"singular":"blockdeviceclaim"},"scope":"Namespaced","versions":[{"additionalPrinterColumns":[{"jsonPath":".spec.blockDeviceName","name":"BlockDeviceName","type":"string"},{"jsonPath":".status.phase","name":"Phase","type":"string"},{"jsonPath":".metadata.creationTimestamp","name":"Age","type":"date"}],"name":"v1alpha1","schema":{"openAPIV3Schema":{"description":"BlockDeviceClaim is the Schema for the blockdeviceclaims API","properties":{"apiVersion":{"description":"APIVersion defines the versioned schema of this representation of an object. Servers should convert recognized schemas to the latest internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources","type":"string"},"kind":{"description":"Kind is a string value representing the REST resource this object represents. Servers may infer this from the endpoint the client submits requests to. Cannot be updated. In CamelCase. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds","type":"string"},"metadata":{"type":"object"},"spec":{"description":"DeviceClaimSpec defines the request details for a BlockDevice","properties":{"blockDeviceName":{"description":"BlockDeviceName is the reference to the block-device backing this claim","type":"string"},"blockDeviceNodeAttributes":{"description":"BlockDeviceNodeAttributes is the attributes on the node from which a BD should be selected for this claim. It can include nodename, failure domain etc.","properties":{"hostName":{"description":"HostName represents the hostname of the Kubernetes node resource where the BD should be present","type":"string"},"nodeName":{"description":"NodeName represents the name of the Kubernetes node resource where the BD should be present","type":"string"}},"type":"object"},"deviceClaimDetails":{"description":"Details of the device to be claimed","properties":{"allowPartition":{"description":"AllowPartition represents whether to claim a full block device or a device that is a partition","type":"boolean"},"blockVolumeMode":{"description":"BlockVolumeMode represents whether to claim a device in Block mode or Filesystem mode. These are use cases of BlockVolumeMode: 1) Not specified: VolumeMode check will not be effective 2) VolumeModeBlock: BD should not have any filesystem or mountpoint 3) VolumeModeFileSystem: BD should have a filesystem and mountpoint. If DeviceFormat is    specified then the format should match with the FSType in BD","type":"string"},"formatType":{"description":"Format of the device required, eg:ext4, xfs","type":"string"}},"type":"object"},"deviceType":{"description":"DeviceType represents the type of drive like SSD, HDD etc.,","nullable":true,"type":"string"},"hostName":{"description":"Node name from where blockdevice has to be claimed. To be deprecated. Use NodeAttributes.HostName instead","type":"string"},"resources":{"description":"Resources will help with placing claims on Capacity, IOPS","properties":{"requests":{"additionalProperties":{"anyOf":[{"type":"integer"},{"type":"string"}],"pattern":"^(\\+|-)?(([0-9]+(\\.[0-9]*)?)|(\\.[0-9]+))(([KMGTPE]i)|[numkMGTPE]|([eE](\\+|-)?(([0-9]+(\\.[0-9]*)?)|(\\.[0-9]+))))?$","x-kubernetes-int-or-string":true},"description":"Requests describes the minimum resources required. eg: if storage resource of 10G is requested minimum capacity of 10G should be available TODO for validating","type":"object"}},"required":["requests"],"type":"object"},"selector":{"description":"Selector is used to find block devices to be considered for claiming","properties":{"matchExpressions":{"description":"matchExpressions is a list of label selector requirements. The requirements are ANDed.","items":{"description":"A label selector requirement is a selector that contains values, a key, and an operator that relates the key and values.","properties":{"key":{"description":"key is the label key that the selector applies to.","type":"string"},"operator":{"description":"operator represents a key's relationship to a set of values. Valid operators are In, NotIn, Exists and DoesNotExist.","type":"string"},"values":{"description":"values is an array of string values. If the operator is In or NotIn, the values array must be non-empty. If the operator is Exists or DoesNotExist, the values array must be empty. This array is replaced during a strategic merge patch.","items":{"type":"string"},"type":"array"}},"required":["key","operator"],"type":"object"},"type":"array"},"matchLabels":{"additionalProperties":{"type":"string"},"description":"matchLabels is a map of {key,value} pairs. A single {key,value} in the matchLabels map is equivalent to an element of matchExpressions, whose key field is \"key\", the operator is \"In\", and the values array contains only \"value\". The requirements are ANDed.","type":"object"}},"type":"object"}},"type":"object"},"status":{"description":"DeviceClaimStatus defines the observed state of BlockDeviceClaim","properties":{"phase":{"description":"Phase represents the current phase of the claim","type":"string"}},"required":["phase"],"type":"object"}},"type":"object"}},"served":true,"storage":true,"subresources":{}}]},"status":{"acceptedNames":{"kind":"","plural":""},"conditions":[],"storedVersions":[]}}
+    creationTimestamp: "2024-12-28T05:45:34Z"
+    generation: 1
+    name: blockdeviceclaims.openebs.io
+    resourceVersion: "777286"
+    uid: 7fe54fc6-5946-421a-8ce1-11c35d248c38
+  spec:
+    conversion:
+      strategy: None
+    group: openebs.io
+    names:
+      kind: BlockDeviceClaim
+      listKind: BlockDeviceClaimList
+      plural: blockdeviceclaims
+      shortNames:
+      - bdc
+      singular: blockdeviceclaim
+    scope: Namespaced
+    versions:
+    - additionalPrinterColumns:
+      - jsonPath: .spec.blockDeviceName
+        name: BlockDeviceName
+        type: string
+      - jsonPath: .status.phase
+        name: Phase
+        type: string
+      - jsonPath: .metadata.creationTimestamp
+        name: Age
+        type: date
+      name: v1alpha1
+      schema:
+        openAPIV3Schema:
+          description: BlockDeviceClaim is the Schema for the blockdeviceclaims API
+          properties:
+            apiVersion:
+              description: 'APIVersion defines the versioned schema of this representation
+                of an object. Servers should convert recognized schemas to the latest
+                internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources'
+              type: string
+            kind:
+              description: 'Kind is a string value representing the REST resource
+                this object represents. Servers may infer this from the endpoint the
+                client submits requests to. Cannot be updated. In CamelCase. More
+                info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds'
+              type: string
+            metadata:
+              type: object
+            spec:
+              description: DeviceClaimSpec defines the request details for a BlockDevice
+              properties:
+                blockDeviceName:
+                  description: BlockDeviceName is the reference to the block-device
+                    backing this claim
+                  type: string
+                blockDeviceNodeAttributes:
+                  description: BlockDeviceNodeAttributes is the attributes on the
+                    node from which a BD should be selected for this claim. It can
+                    include nodename, failure domain etc.
+                  properties:
+                    hostName:
+                      description: HostName represents the hostname of the Kubernetes
+                        node resource where the BD should be present
+                      type: string
+                    nodeName:
+                      description: NodeName represents the name of the Kubernetes
+                        node resource where the BD should be present
+                      type: string
+                  type: object
+                deviceClaimDetails:
+                  description: Details of the device to be claimed
+                  properties:
+                    allowPartition:
+                      description: AllowPartition represents whether to claim a full
+                        block device or a device that is a partition
+                      type: boolean
+                    blockVolumeMode:
+                      description: 'BlockVolumeMode represents whether to claim a
+                        device in Block mode or Filesystem mode. These are use cases
+                        of BlockVolumeMode: 1) Not specified: VolumeMode check will
+                        not be effective 2) VolumeModeBlock: BD should not have any
+                        filesystem or mountpoint 3) VolumeModeFileSystem: BD should
+                        have a filesystem and mountpoint. If DeviceFormat is    specified
+                        then the format should match with the FSType in BD'
+                      type: string
+                    formatType:
+                      description: Format of the device required, eg:ext4, xfs
+                      type: string
+                  type: object
+                deviceType:
+                  description: DeviceType represents the type of drive like SSD, HDD
+                    etc.,
+                  nullable: true
+                  type: string
+                hostName:
+                  description: Node name from where blockdevice has to be claimed.
+                    To be deprecated. Use NodeAttributes.HostName instead
+                  type: string
+                resources:
+                  description: Resources will help with placing claims on Capacity,
+                    IOPS
+                  properties:
+                    requests:
+                      additionalProperties:
+                        anyOf:
+                        - type: integer
+                        - type: string
+                        pattern: ^(\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))(([KMGTPE]i)|[numkMGTPE]|([eE](\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))))?$
+                        x-kubernetes-int-or-string: true
+                      description: 'Requests describes the minimum resources required.
+                        eg: if storage resource of 10G is requested minimum capacity
+                        of 10G should be available TODO for validating'
+                      type: object
+                  required:
+                  - requests
+                  type: object
+                selector:
+                  description: Selector is used to find block devices to be considered
+                    for claiming
+                  properties:
+                    matchExpressions:
+                      description: matchExpressions is a list of label selector requirements.
+                        The requirements are ANDed.
+                      items:
+                        description: A label selector requirement is a selector that
+                          contains values, a key, and an operator that relates the
+                          key and values.
+                        properties:
+                          key:
+                            description: key is the label key that the selector applies
+                              to.
+                            type: string
+                          operator:
+                            description: operator represents a key's relationship
+                              to a set of values. Valid operators are In, NotIn, Exists
+                              and DoesNotExist.
+                            type: string
+                          values:
+                            description: values is an array of string values. If the
+                              operator is In or NotIn, the values array must be non-empty.
+                              If the operator is Exists or DoesNotExist, the values
+                              array must be empty. This array is replaced during a
+                              strategic merge patch.
+                            items:
+                              type: string
+                            type: array
+                        required:
+                        - key
+                        - operator
+                        type: object
+                      type: array
+                    matchLabels:
+                      additionalProperties:
+                        type: string
+                      description: matchLabels is a map of {key,value} pairs. A single
+                        {key,value} in the matchLabels map is equivalent to an element
+                        of matchExpressions, whose key field is "key", the operator
+                        is "In", and the values array contains only "value". The requirements
+                        are ANDed.
+                      type: object
+                  type: object
+              type: object
+            status:
+              description: DeviceClaimStatus defines the observed state of BlockDeviceClaim
+              properties:
+                phase:
+                  description: Phase represents the current phase of the claim
+                  type: string
+              required:
+              - phase
+              type: object
+          type: object
+      served: true
+      storage: true
+      subresources: {}
+  status:
+    acceptedNames:
+      kind: BlockDeviceClaim
+      listKind: BlockDeviceClaimList
+      plural: blockdeviceclaims
+      shortNames:
+      - bdc
+      singular: blockdeviceclaim
+    conditions:
+    - lastTransitionTime: "2024-12-28T05:45:34Z"
+      message: no conflicts found
+      reason: NoConflicts
+      status: "True"
+      type: NamesAccepted
+    - lastTransitionTime: "2024-12-28T05:45:35Z"
+      message: the initial names have been accepted
+      reason: InitialNamesAccepted
+      status: "True"
+      type: Established
+    storedVersions:
+    - v1alpha1
+- apiVersion: v1
+  data:
+    node-disk-manager.config: |
+      probeconfigs:
+        - key: udev-probe
+          name: udev probe
+          state: true
+        - key: seachest-probe
+          name: seachest probe
+          state: false
+        - key: smart-probe
+          name: smart probe
+          state: true
+      filterconfigs:
+        - key: os-disk-exclude-filter
+          name: os disk exclude filter
+          state: true
+          exclude: "/,/etc/hosts,/boot"
+        - key: vendor-filter
+          name: vendor filter
+          state: true
+          include: ""
+          exclude: "CLOUDBYT,OpenEBS"
+        - key: path-filter
+          name: path filter
+          state: true
+          include: ""
+          exclude: "/dev/loop,/dev/fd0,/dev/sr0,/dev/ram,/dev/md,/dev/dm-,/dev/rbd,/dev/zd"
+      # metconfig can be used to decorate the block device with different types of labels
+      # that are available on the node or come in a device properties.
+      # node labels - the node where bd is discovered. A whitlisted label prefixes
+      # attribute labels - a property of the BD can be added as a ndm label as ndm.io/<property>=<property-value>
+      metaconfigs:
+        - key: node-labels
+          name: node labels
+          pattern: ""
+        - key: device-labels
+          name: device labels
+          type: ""
+  kind: ConfigMap
+  metadata:
+    annotations:
+      kubectl.kubernetes.io/last-applied-configuration: |
+        {"apiVersion":"v1","data":{"node-disk-manager.config":"probeconfigs:\n  - key: udev-probe\n    name: udev probe\n    state: true\n  - key: seachest-probe\n    name: seachest probe\n    state: false\n  - key: smart-probe\n    name: smart probe\n    state: true\nfilterconfigs:\n  - key: os-disk-exclude-filter\n    name: os disk exclude filter\n    state: true\n    exclude: \"/,/etc/hosts,/boot\"\n  - key: vendor-filter\n    name: vendor filter\n    state: true\n    include: \"\"\n    exclude: \"CLOUDBYT,OpenEBS\"\n  - key: path-filter\n    name: path filter\n    state: true\n    include: \"\"\n    exclude: \"/dev/loop,/dev/fd0,/dev/sr0,/dev/ram,/dev/md,/dev/dm-,/dev/rbd,/dev/zd\"\n# metconfig can be used to decorate the block device with different types of labels\n# that are available on the node or come in a device properties.\n# node labels - the node where bd is discovered. A whitlisted label prefixes\n# attribute labels - a property of the BD can be added as a ndm label as ndm.io/\u003cproperty\u003e=\u003cproperty-value\u003e\nmetaconfigs:\n  - key: node-labels\n    name: node labels\n    pattern: \"\"\n  - key: device-labels\n    name: device labels\n    type: \"\"\n"},"kind":"ConfigMap","metadata":{"annotations":{},"labels":{"openebs.io/component-name":"ndm-config"},"name":"openebs-ndm-config","namespace":"openebs"}}
+    creationTimestamp: "2024-12-28T05:45:34Z"
+    labels:
+      openebs.io/component-name: ndm-config
+    name: openebs-ndm-config
+    namespace: openebs
+    resourceVersion: "777285"
+    uid: 155abc28-99ef-4ab8-930f-c26cc6267d46
+- apiVersion: apps/v1
+  kind: DaemonSet
+  metadata:
+    annotations:
+      deprecated.daemonset.template.generation: "1"
+      kubectl.kubernetes.io/last-applied-configuration: |
+        {"apiVersion":"apps/v1","kind":"DaemonSet","metadata":{"annotations":{},"labels":{"name":"openebs-ndm","openebs.io/component-name":"ndm","openebs.io/version":"3.5.0"},"name":"openebs-ndm","namespace":"openebs"},"spec":{"selector":{"matchLabels":{"name":"openebs-ndm","openebs.io/component-name":"ndm"}},"template":{"metadata":{"labels":{"name":"openebs-ndm","openebs.io/component-name":"ndm","openebs.io/version":"3.5.0"}},"spec":{"containers":[{"args":["-v=4","--feature-gates=\"GPTBasedUUID\""],"env":[{"name":"NAMESPACE","valueFrom":{"fieldRef":{"fieldPath":"metadata.namespace"}}},{"name":"NODE_NAME","valueFrom":{"fieldRef":{"fieldPath":"spec.nodeName"}}},{"name":"SPARSE_FILE_DIR","value":"/var/openebs/sparse"},{"name":"SPARSE_FILE_SIZE","value":"10737418240"},{"name":"SPARSE_FILE_COUNT","value":"0"}],"image":"openebs/node-disk-manager:2.1.0","imagePullPolicy":"IfNotPresent","livenessProbe":{"exec":{"command":["pgrep","ndm"]},"initialDelaySeconds":30,"periodSeconds":60},"name":"node-disk-manager","securityContext":{"privileged":true},"volumeMounts":[{"mountPath":"/host/node-disk-manager.config","name":"config","readOnly":true,"subPath":"node-disk-manager.config"},{"mountPath":"/run/udev","name":"udev"},{"mountPath":"/host/proc","name":"procmount","readOnly":true},{"mountPath":"/dev","name":"devmount"},{"mountPath":"/var/openebs/ndm","name":"basepath"},{"mountPath":"/var/openebs/sparse","name":"sparsepath"}]}],"hostNetwork":true,"serviceAccountName":"openebs-maya-operator","volumes":[{"configMap":{"name":"openebs-ndm-config"},"name":"config"},{"hostPath":{"path":"/run/udev","type":"Directory"},"name":"udev"},{"hostPath":{"path":"/proc","type":"Directory"},"name":"procmount"},{"hostPath":{"path":"/dev","type":"Directory"},"name":"devmount"},{"hostPath":{"path":"/var/openebs/ndm","type":"DirectoryOrCreate"},"name":"basepath"},{"hostPath":{"path":"/var/openebs/sparse"},"name":"sparsepath"}]}},"updateStrategy":{"type":"RollingUpdate"}}}
+    creationTimestamp: "2024-12-28T05:45:35Z"
+    generation: 1
+    labels:
+      name: openebs-ndm
+      openebs.io/component-name: ndm
+      openebs.io/version: 3.5.0
+    name: openebs-ndm
+    namespace: openebs
+    resourceVersion: "1316546"
+    uid: b26bd7bc-8884-40b4-a067-aba65d72214f
+  spec:
+    revisionHistoryLimit: 10
+    selector:
+      matchLabels:
+        name: openebs-ndm
+        openebs.io/component-name: ndm
+    template:
+      metadata:
+        creationTimestamp: null
+        labels:
+          name: openebs-ndm
+          openebs.io/component-name: ndm
+          openebs.io/version: 3.5.0
+      spec:
+        containers:
+        - args:
+          - -v=4
+          - --feature-gates="GPTBasedUUID"
+          env:
+          - name: NAMESPACE
+            valueFrom:
+              fieldRef:
+                apiVersion: v1
+                fieldPath: metadata.namespace
+          - name: NODE_NAME
+            valueFrom:
+              fieldRef:
+                apiVersion: v1
+                fieldPath: spec.nodeName
+          - name: SPARSE_FILE_DIR
+            value: /var/openebs/sparse
+          - name: SPARSE_FILE_SIZE
+            value: "10737418240"
+          - name: SPARSE_FILE_COUNT
+            value: "0"
+          image: openebs/node-disk-manager:2.1.0
+          imagePullPolicy: IfNotPresent
+          livenessProbe:
+            exec:
+              command:
+              - pgrep
+              - ndm
+            failureThreshold: 3
+            initialDelaySeconds: 30
+            periodSeconds: 60
+            successThreshold: 1
+            timeoutSeconds: 1
+          name: node-disk-manager
+          resources: {}
+          securityContext:
+            privileged: true
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+          volumeMounts:
+          - mountPath: /host/node-disk-manager.config
+            name: config
+            readOnly: true
+            subPath: node-disk-manager.config
+          - mountPath: /run/udev
+            name: udev
+          - mountPath: /host/proc
+            name: procmount
+            readOnly: true
+          - mountPath: /dev
+            name: devmount
+          - mountPath: /var/openebs/ndm
+            name: basepath
+          - mountPath: /var/openebs/sparse
+            name: sparsepath
+        dnsPolicy: ClusterFirst
+        hostNetwork: true
+        restartPolicy: Always
+        schedulerName: default-scheduler
+        securityContext: {}
+        serviceAccount: openebs-maya-operator
+        serviceAccountName: openebs-maya-operator
+        terminationGracePeriodSeconds: 30
+        volumes:
+        - configMap:
+            defaultMode: 420
+            name: openebs-ndm-config
+          name: config
+        - hostPath:
+            path: /run/udev
+            type: Directory
+          name: udev
+        - hostPath:
+            path: /proc
+            type: Directory
+          name: procmount
+        - hostPath:
+            path: /dev
+            type: Directory
+          name: devmount
+        - hostPath:
+            path: /var/openebs/ndm
+            type: DirectoryOrCreate
+          name: basepath
+        - hostPath:
+            path: /var/openebs/sparse
+            type: ""
+          name: sparsepath
+    updateStrategy:
+      rollingUpdate:
+        maxSurge: 0
+        maxUnavailable: 1
+      type: RollingUpdate
+  status:
+    currentNumberScheduled: 3
+    desiredNumberScheduled: 3
+    numberAvailable: 3
+    numberMisscheduled: 0
+    numberReady: 3
+    observedGeneration: 1
+    updatedNumberScheduled: 3
+- apiVersion: apps/v1
+  kind: Deployment
+  metadata:
+    annotations:
+      deployment.kubernetes.io/revision: "1"
+      kubectl.kubernetes.io/last-applied-configuration: |
+        {"apiVersion":"apps/v1","kind":"Deployment","metadata":{"annotations":{},"labels":{"name":"openebs-ndm-operator","openebs.io/component-name":"ndm-operator","openebs.io/version":"3.5.0"},"name":"openebs-ndm-operator","namespace":"openebs"},"spec":{"replicas":1,"selector":{"matchLabels":{"name":"openebs-ndm-operator","openebs.io/component-name":"ndm-operator"}},"strategy":{"type":"Recreate"},"template":{"metadata":{"labels":{"name":"openebs-ndm-operator","openebs.io/component-name":"ndm-operator","openebs.io/version":"3.5.0"}},"spec":{"containers":[{"env":[{"name":"WATCH_NAMESPACE","valueFrom":{"fieldRef":{"fieldPath":"metadata.namespace"}}},{"name":"POD_NAME","valueFrom":{"fieldRef":{"fieldPath":"metadata.name"}}},{"name":"SERVICE_ACCOUNT","valueFrom":{"fieldRef":{"fieldPath":"spec.serviceAccountName"}}},{"name":"OPERATOR_NAME","value":"node-disk-operator"},{"name":"CLEANUP_JOB_IMAGE","value":"openebs/linux-utils:3.5.0"}],"image":"openebs/node-disk-operator:2.1.0","imagePullPolicy":"IfNotPresent","livenessProbe":{"httpGet":{"path":"/healthz","port":8585},"initialDelaySeconds":15,"periodSeconds":20},"name":"node-disk-operator","readinessProbe":{"httpGet":{"path":"/readyz","port":8585},"initialDelaySeconds":5,"periodSeconds":10}}],"serviceAccountName":"openebs-maya-operator"}}}}
+    creationTimestamp: "2024-12-28T05:45:35Z"
+    generation: 1
+    labels:
+      name: openebs-ndm-operator
+      openebs.io/component-name: ndm-operator
+      openebs.io/version: 3.5.0
+    name: openebs-ndm-operator
+    namespace: openebs
+    resourceVersion: "1254507"
+    uid: aeb654c9-5b54-4ca6-9cc6-509e7dac0122
+  spec:
+    progressDeadlineSeconds: 600
+    replicas: 1
+    revisionHistoryLimit: 10
+    selector:
+      matchLabels:
+        name: openebs-ndm-operator
+        openebs.io/component-name: ndm-operator
+    strategy:
+      type: Recreate
+    template:
+      metadata:
+        creationTimestamp: null
+        labels:
+          name: openebs-ndm-operator
+          openebs.io/component-name: ndm-operator
+          openebs.io/version: 3.5.0
+      spec:
+        containers:
+        - env:
+          - name: WATCH_NAMESPACE
+            valueFrom:
+              fieldRef:
+                apiVersion: v1
+                fieldPath: metadata.namespace
+          - name: POD_NAME
+            valueFrom:
+              fieldRef:
+                apiVersion: v1
+                fieldPath: metadata.name
+          - name: SERVICE_ACCOUNT
+            valueFrom:
+              fieldRef:
+                apiVersion: v1
+                fieldPath: spec.serviceAccountName
+          - name: OPERATOR_NAME
+            value: node-disk-operator
+          - name: CLEANUP_JOB_IMAGE
+            value: openebs/linux-utils:3.5.0
+          image: openebs/node-disk-operator:2.1.0
+          imagePullPolicy: IfNotPresent
+          livenessProbe:
+            failureThreshold: 3
+            httpGet:
+              path: /healthz
+              port: 8585
+              scheme: HTTP
+            initialDelaySeconds: 15
+            periodSeconds: 20
+            successThreshold: 1
+            timeoutSeconds: 1
+          name: node-disk-operator
+          readinessProbe:
+            failureThreshold: 3
+            httpGet:
+              path: /readyz
+              port: 8585
+              scheme: HTTP
+            initialDelaySeconds: 5
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 1
+          resources: {}
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+        dnsPolicy: ClusterFirst
+        restartPolicy: Always
+        schedulerName: default-scheduler
+        securityContext: {}
+        serviceAccount: openebs-maya-operator
+        serviceAccountName: openebs-maya-operator
+        terminationGracePeriodSeconds: 30
+  status:
+    availableReplicas: 1
+    conditions:
+    - lastTransitionTime: "2024-12-28T05:45:35Z"
+      lastUpdateTime: "2024-12-28T05:45:58Z"
+      message: ReplicaSet "openebs-ndm-operator-cb7bf6676" has successfully progressed.
+      reason: NewReplicaSetAvailable
+      status: "True"
+      type: Progressing
+    - lastTransitionTime: "2024-12-30T07:11:44Z"
+      lastUpdateTime: "2024-12-30T07:11:44Z"
+      message: Deployment has minimum availability.
+      reason: MinimumReplicasAvailable
+      status: "True"
+      type: Available
+    observedGeneration: 1
+    readyReplicas: 1
+    replicas: 1
+    updatedReplicas: 1
+- apiVersion: apps/v1
+  kind: Deployment
+  metadata:
+    annotations:
+      deployment.kubernetes.io/revision: "1"
+      kubectl.kubernetes.io/last-applied-configuration: |
+        {"apiVersion":"apps/v1","kind":"Deployment","metadata":{"annotations":{},"labels":{"name":"openebs-ndm-cluster-exporter","openebs.io/component-name":"ndm-cluster-exporter","openebs.io/version":"3.5.0"},"name":"openebs-ndm-cluster-exporter","namespace":"openebs"},"spec":{"replicas":1,"selector":{"matchLabels":{"name":"openebs-ndm-cluster-exporter","openebs.io/component-name":"ndm-cluster-exporter"}},"strategy":{"type":"Recreate"},"template":{"metadata":{"labels":{"name":"openebs-ndm-cluster-exporter","openebs.io/component-name":"ndm-cluster-exporter","openebs.io/version":"3.5.0"}},"spec":{"containers":[{"args":["start","--mode=cluster","--port=$(METRICS_LISTEN_PORT)","--metrics=/metrics"],"command":["/usr/local/bin/exporter"],"env":[{"name":"NAMESPACE","valueFrom":{"fieldRef":{"fieldPath":"metadata.namespace"}}},{"name":"METRICS_LISTEN_PORT","value":":9100"}],"image":"openebs/node-disk-exporter:2.1.0","imagePullPolicy":"IfNotPresent","name":"ndm-cluster-exporter","ports":[{"containerPort":9100,"name":"metrics","protocol":"TCP"}]}],"serviceAccountName":"openebs-maya-operator"}}}}
+    creationTimestamp: "2024-12-28T05:45:35Z"
+    generation: 1
+    labels:
+      name: openebs-ndm-cluster-exporter
+      openebs.io/component-name: ndm-cluster-exporter
+      openebs.io/version: 3.5.0
+    name: openebs-ndm-cluster-exporter
+    namespace: openebs
+    resourceVersion: "1254468"
+    uid: 2cb13145-11c1-47dc-baf7-534d0c9c2173
+  spec:
+    progressDeadlineSeconds: 600
+    replicas: 1
+    revisionHistoryLimit: 10
+    selector:
+      matchLabels:
+        name: openebs-ndm-cluster-exporter
+        openebs.io/component-name: ndm-cluster-exporter
+    strategy:
+      type: Recreate
+    template:
+      metadata:
+        creationTimestamp: null
+        labels:
+          name: openebs-ndm-cluster-exporter
+          openebs.io/component-name: ndm-cluster-exporter
+          openebs.io/version: 3.5.0
+      spec:
+        containers:
+        - args:
+          - start
+          - --mode=cluster
+          - --port=$(METRICS_LISTEN_PORT)
+          - --metrics=/metrics
+          command:
+          - /usr/local/bin/exporter
+          env:
+          - name: NAMESPACE
+            valueFrom:
+              fieldRef:
+                apiVersion: v1
+                fieldPath: metadata.namespace
+          - name: METRICS_LISTEN_PORT
+            value: :9100
+          image: openebs/node-disk-exporter:2.1.0
+          imagePullPolicy: IfNotPresent
+          name: ndm-cluster-exporter
+          ports:
+          - containerPort: 9100
+            name: metrics
+            protocol: TCP
+          resources: {}
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+        dnsPolicy: ClusterFirst
+        restartPolicy: Always
+        schedulerName: default-scheduler
+        securityContext: {}
+        serviceAccount: openebs-maya-operator
+        serviceAccountName: openebs-maya-operator
+        terminationGracePeriodSeconds: 30
+  status:
+    availableReplicas: 1
+    conditions:
+    - lastTransitionTime: "2024-12-28T05:45:35Z"
+      lastUpdateTime: "2024-12-28T05:45:56Z"
+      message: ReplicaSet "openebs-ndm-cluster-exporter-6d8759c9b" has successfully
+        progressed.
+      reason: NewReplicaSetAvailable
+      status: "True"
+      type: Progressing
+    - lastTransitionTime: "2024-12-30T07:11:35Z"
+      lastUpdateTime: "2024-12-30T07:11:35Z"
+      message: Deployment has minimum availability.
+      reason: MinimumReplicasAvailable
+      status: "True"
+      type: Available
+    observedGeneration: 1
+    readyReplicas: 1
+    replicas: 1
+    updatedReplicas: 1
+- apiVersion: v1
+  kind: Service
+  metadata:
+    annotations:
+      kubectl.kubernetes.io/last-applied-configuration: |
+        {"apiVersion":"v1","kind":"Service","metadata":{"annotations":{},"labels":{"app":"openebs-ndm-exporter","name":"openebs-ndm-cluster-exporter-service","openebs.io/component-name":"ndm-cluster-exporter"},"name":"openebs-ndm-cluster-exporter-service","namespace":"openebs"},"spec":{"clusterIP":"None","ports":[{"name":"metrics","port":9100,"targetPort":9100}],"selector":{"name":"openebs-ndm-cluster-exporter"}}}
+    creationTimestamp: "2024-12-28T05:45:35Z"
+    labels:
+      app: openebs-ndm-exporter
+      name: openebs-ndm-cluster-exporter-service
+      openebs.io/component-name: ndm-cluster-exporter
+    name: openebs-ndm-cluster-exporter-service
+    namespace: openebs
+    resourceVersion: "777294"
+    uid: 38e60419-b27f-4816-b938-a9cc97e499ec
+  spec:
+    clusterIP: None
+    clusterIPs:
+    - None
+    internalTrafficPolicy: Cluster
+    ipFamilies:
+    - IPv4
+    ipFamilyPolicy: SingleStack
+    ports:
+    - name: metrics
+      port: 9100
+      protocol: TCP
+      targetPort: 9100
+    selector:
+      name: openebs-ndm-cluster-exporter
+    sessionAffinity: None
+    type: ClusterIP
+  status:
+    loadBalancer: {}
+- apiVersion: apps/v1
+  kind: DaemonSet
+  metadata:
+    annotations:
+      deprecated.daemonset.template.generation: "1"
+      kubectl.kubernetes.io/last-applied-configuration: |
+        {"apiVersion":"apps/v1","kind":"DaemonSet","metadata":{"annotations":{},"labels":{"name":"openebs-ndm-node-exporter","openebs.io/component-name":"ndm-node-exporter","openebs.io/version":"3.5.0"},"name":"openebs-ndm-node-exporter","namespace":"openebs"},"spec":{"selector":{"matchLabels":{"name":"openebs-ndm-node-exporter","openebs.io/component-name":"ndm-node-exporter"}},"template":{"metadata":{"labels":{"name":"openebs-ndm-node-exporter","openebs.io/component-name":"ndm-node-exporter","openebs.io/version":"3.5.0"}},"spec":{"containers":[{"args":["start","--mode=node","--port=$(METRICS_LISTEN_PORT)","--metrics=/metrics"],"command":["/usr/local/bin/exporter"],"env":[{"name":"NAMESPACE","valueFrom":{"fieldRef":{"fieldPath":"metadata.namespace"}}},{"name":"METRICS_LISTEN_PORT","value":":9101"}],"image":"openebs/node-disk-exporter:2.1.0","imagePullPolicy":"IfNotPresent","name":"node-disk-exporter","ports":[{"containerPort":9101,"name":"metrics","protocol":"TCP"}],"securityContext":{"privileged":true}}],"serviceAccountName":"openebs-maya-operator"}},"updateStrategy":{"type":"RollingUpdate"}}}
+    creationTimestamp: "2024-12-28T05:45:35Z"
+    generation: 1
+    labels:
+      name: openebs-ndm-node-exporter
+      openebs.io/component-name: ndm-node-exporter
+      openebs.io/version: 3.5.0
+    name: openebs-ndm-node-exporter
+    namespace: openebs
+    resourceVersion: "1316548"
+    uid: ea7c85cd-677a-4f93-97e2-ce710a7d7735
+  spec:
+    revisionHistoryLimit: 10
+    selector:
+      matchLabels:
+        name: openebs-ndm-node-exporter
+        openebs.io/component-name: ndm-node-exporter
+    template:
+      metadata:
+        creationTimestamp: null
+        labels:
+          name: openebs-ndm-node-exporter
+          openebs.io/component-name: ndm-node-exporter
+          openebs.io/version: 3.5.0
+      spec:
+        containers:
+        - args:
+          - start
+          - --mode=node
+          - --port=$(METRICS_LISTEN_PORT)
+          - --metrics=/metrics
+          command:
+          - /usr/local/bin/exporter
+          env:
+          - name: NAMESPACE
+            valueFrom:
+              fieldRef:
+                apiVersion: v1
+                fieldPath: metadata.namespace
+          - name: METRICS_LISTEN_PORT
+            value: :9101
+          image: openebs/node-disk-exporter:2.1.0
+          imagePullPolicy: IfNotPresent
+          name: node-disk-exporter
+          ports:
+          - containerPort: 9101
+            name: metrics
+            protocol: TCP
+          resources: {}
+          securityContext:
+            privileged: true
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+        dnsPolicy: ClusterFirst
+        restartPolicy: Always
+        schedulerName: default-scheduler
+        securityContext: {}
+        serviceAccount: openebs-maya-operator
+        serviceAccountName: openebs-maya-operator
+        terminationGracePeriodSeconds: 30
+    updateStrategy:
+      rollingUpdate:
+        maxSurge: 0
+        maxUnavailable: 1
+      type: RollingUpdate
+  status:
+    currentNumberScheduled: 3
+    desiredNumberScheduled: 3
+    numberAvailable: 3
+    numberMisscheduled: 0
+    numberReady: 3
+    observedGeneration: 1
+    updatedNumberScheduled: 3
+- apiVersion: v1
+  kind: Service
+  metadata:
+    annotations:
+      kubectl.kubernetes.io/last-applied-configuration: |
+        {"apiVersion":"v1","kind":"Service","metadata":{"annotations":{},"labels":{"app":"openebs-ndm-exporter","name":"openebs-ndm-node-exporter","openebs.io/component":"openebs-ndm-node-exporter"},"name":"openebs-ndm-node-exporter-service","namespace":"openebs"},"spec":{"clusterIP":"None","ports":[{"name":"metrics","port":9101,"targetPort":9101}],"selector":{"name":"openebs-ndm-node-exporter"}}}
+    creationTimestamp: "2024-12-28T05:45:36Z"
+    labels:
+      app: openebs-ndm-exporter
+      name: openebs-ndm-node-exporter
+      openebs.io/component: openebs-ndm-node-exporter
+    name: openebs-ndm-node-exporter-service
+    namespace: openebs
+    resourceVersion: "777324"
+    uid: bf6ca4bc-6f3b-4d73-92dd-a7344ce2488f
+  spec:
+    clusterIP: None
+    clusterIPs:
+    - None
+    internalTrafficPolicy: Cluster
+    ipFamilies:
+    - IPv4
+    ipFamilyPolicy: SingleStack
+    ports:
+    - name: metrics
+      port: 9101
+      protocol: TCP
+      targetPort: 9101
+    selector:
+      name: openebs-ndm-node-exporter
+    sessionAffinity: None
+    type: ClusterIP
+  status:
+    loadBalancer: {}
+- apiVersion: apps/v1
+  kind: Deployment
+  metadata:
+    annotations:
+      deployment.kubernetes.io/revision: "1"
+      kubectl.kubernetes.io/last-applied-configuration: |
+        {"apiVersion":"apps/v1","kind":"Deployment","metadata":{"annotations":{},"labels":{"name":"openebs-localpv-provisioner","openebs.io/component-name":"openebs-localpv-provisioner","openebs.io/version":"3.5.0"},"name":"openebs-localpv-provisioner","namespace":"openebs"},"spec":{"replicas":1,"selector":{"matchLabels":{"name":"openebs-localpv-provisioner","openebs.io/component-name":"openebs-localpv-provisioner"}},"strategy":{"type":"Recreate"},"template":{"metadata":{"labels":{"name":"openebs-localpv-provisioner","openebs.io/component-name":"openebs-localpv-provisioner","openebs.io/version":"3.5.0"}},"spec":{"containers":[{"args":["--bd-time-out=$(BDC_BD_BIND_RETRIES)"],"env":[{"name":"BDC_BD_BIND_RETRIES","value":"12"},{"name":"NODE_NAME","valueFrom":{"fieldRef":{"fieldPath":"spec.nodeName"}}},{"name":"OPENEBS_NAMESPACE","valueFrom":{"fieldRef":{"fieldPath":"metadata.namespace"}}},{"name":"OPENEBS_SERVICE_ACCOUNT","valueFrom":{"fieldRef":{"fieldPath":"spec.serviceAccountName"}}},{"name":"OPENEBS_IO_ENABLE_ANALYTICS","value":"true"},{"name":"OPENEBS_IO_INSTALLER_TYPE","value":"openebs-operator-lite"},{"name":"OPENEBS_IO_HELPER_IMAGE","value":"openebs/linux-utils:3.5.0"},{"name":"OPENEBS_IO_BASE_PATH","value":"/var/openebs/local"}],"image":"openebs/provisioner-localpv:3.5.0","imagePullPolicy":"IfNotPresent","livenessProbe":{"exec":{"command":["sh","-c","test `pgrep -c \"^provisioner-loc.*\"` = 1"]},"initialDelaySeconds":30,"periodSeconds":60},"name":"openebs-provisioner-hostpath"}],"serviceAccountName":"openebs-maya-operator"}}}}
+    creationTimestamp: "2024-12-28T05:45:38Z"
+    generation: 1
+    labels:
+      name: openebs-localpv-provisioner
+      openebs.io/component-name: openebs-localpv-provisioner
+      openebs.io/version: 3.5.0
+    name: openebs-localpv-provisioner
+    namespace: openebs
+    resourceVersion: "1269858"
+    uid: f101cb29-adeb-4d7d-9da9-f37c7d350933
+  spec:
+    progressDeadlineSeconds: 600
+    replicas: 1
+    revisionHistoryLimit: 10
+    selector:
+      matchLabels:
+        name: openebs-localpv-provisioner
+        openebs.io/component-name: openebs-localpv-provisioner
+    strategy:
+      type: Recreate
+    template:
+      metadata:
+        creationTimestamp: null
+        labels:
+          name: openebs-localpv-provisioner
+          openebs.io/component-name: openebs-localpv-provisioner
+          openebs.io/version: 3.5.0
+      spec:
+        containers:
+        - args:
+          - --bd-time-out=$(BDC_BD_BIND_RETRIES)
+          env:
+          - name: BDC_BD_BIND_RETRIES
+            value: "12"
+          - name: NODE_NAME
+            valueFrom:
+              fieldRef:
+                apiVersion: v1
+                fieldPath: spec.nodeName
+          - name: OPENEBS_NAMESPACE
+            valueFrom:
+              fieldRef:
+                apiVersion: v1
+                fieldPath: metadata.namespace
+          - name: OPENEBS_SERVICE_ACCOUNT
+            valueFrom:
+              fieldRef:
+                apiVersion: v1
+                fieldPath: spec.serviceAccountName
+          - name: OPENEBS_IO_ENABLE_ANALYTICS
+            value: "true"
+          - name: OPENEBS_IO_INSTALLER_TYPE
+            value: openebs-operator-lite
+          - name: OPENEBS_IO_HELPER_IMAGE
+            value: openebs/linux-utils:3.5.0
+          - name: OPENEBS_IO_BASE_PATH
+            value: /var/openebs/local
+          image: openebs/provisioner-localpv:3.5.0
+          imagePullPolicy: IfNotPresent
+          livenessProbe:
+            exec:
+              command:
+              - sh
+              - -c
+              - test `pgrep -c "^provisioner-loc.*"` = 1
+            failureThreshold: 3
+            initialDelaySeconds: 30
+            periodSeconds: 60
+            successThreshold: 1
+            timeoutSeconds: 1
+          name: openebs-provisioner-hostpath
+          resources: {}
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+        dnsPolicy: ClusterFirst
+        restartPolicy: Always
+        schedulerName: default-scheduler
+        securityContext: {}
+        serviceAccount: openebs-maya-operator
+        serviceAccountName: openebs-maya-operator
+        terminationGracePeriodSeconds: 30
+  status:
+    availableReplicas: 1
+    conditions:
+    - lastTransitionTime: "2024-12-28T05:45:38Z"
+      lastUpdateTime: "2024-12-28T05:46:03Z"
+      message: ReplicaSet "openebs-localpv-provisioner-57b77f7679" has successfully
+        progressed.
+      reason: NewReplicaSetAvailable
+      status: "True"
+      type: Progressing
+    - lastTransitionTime: "2024-12-30T08:41:09Z"
+      lastUpdateTime: "2024-12-30T08:41:09Z"
+      message: Deployment has minimum availability.
+      reason: MinimumReplicasAvailable
+      status: "True"
+      type: Available
+    observedGeneration: 1
+    readyReplicas: 1
+    replicas: 1
+    updatedReplicas: 1
+kind: List
+metadata: {}

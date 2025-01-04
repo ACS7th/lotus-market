@@ -1,0 +1,29 @@
+apiVersion: v1
+kind: ResourceQuota
+metadata:
+  name: db-dev-rq
+  namespace: db-dev
+spec:
+  hard:
+    requests.cpu: "2"
+    requests.memory: "4Gi"
+    limits.cpu: "3"
+    limits.memory: "5Gi"
+---
+apiVersion: v1
+kind: LimitRange
+metadata:
+  name: db-dev-lr
+  namespace: db-dev
+spec:
+  limits:
+  - type: Container
+    defaultRequest:
+      cpu: "1"
+      memory: "1Gi"
+    default:
+      cpu: "1"
+      memory: "2Gi"
+    max:
+      cpu: "2"
+      memory: "4Gi"

@@ -1,0 +1,76 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: back-ops
+  namespace: back-ops
+  labels:
+    app: back-ops
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: back-ops
+  template:
+    metadata:
+      labels:
+        app: back-ops
+    spec:
+      priorityClassName: db-ops-priority
+      volumes:
+      - name: gcp-key-vol
+        secret:
+          secretName: back-gcp-secret
+          items:
+          - key: key.json
+            path: key.json
+      containers:
+      - name: back-ops-container
+        image: dealim/lotus-market-spring:2.0
+        ports:
+        - containerPort: 8765
+        volumeMounts:
+        - name: gcp-key-vol
+          mountPath: /app/key.json
+          subPath: key.json
+          readOnly: true
+        envFrom:
+        - configMapRef:
+            name: back-ops-cm
+        env:
+        - name: DB_USERNAME
+          valueFrom:
+            secretKeyRef:
+              name: back-db-secret
+              key: MONGO_USERNAME
+        - name: DB_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: back-db-secret
+              key: MONGO_PASSWORD
+        resources:
+          requests:
+            cpu: "1"
+            memory: "3Gi"
+          limits:
+            cpu: "2"
+            memory: "6Gi"
+---
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: back-ops-hpa
+  namespace: back-ops
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: back-ops
+  minReplicas: 1
+  maxReplicas: 5
+  metrics:
+  - type: Resource
+    resource:
+      name: cpu
+      target:
+        type: Utilization
+        averageUtilization: 70

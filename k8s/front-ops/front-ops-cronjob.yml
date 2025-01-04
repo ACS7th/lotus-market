@@ -1,0 +1,89 @@
+---
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: scale-up-replicas-night
+  namespace: front-ops
+spec:
+  schedule: "0 20 * * 1-5" # 매주 월~금 저녁 8시
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          containers:
+          - name: scale-up
+            image: bitnami/kubectl:latest
+            command:
+            - /bin/sh
+            - -c
+            - |
+              kubectl scale deployment front-ops --replicas=3 -n front-ops
+          restartPolicy: OnFailure
+---
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: scale-down-replicas-midnight
+  namespace: front-ops
+spec:
+  schedule: "0 0 * * 1-5" # 매주 월~금 자정
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          containers:
+          - name: scale-down
+            image: bitnami/kubectl:latest
+            command:
+            - /bin/sh
+            - -c
+            - |
+              kubectl scale deployment front-ops --replicas=2 -n front-ops
+          restartPolicy: OnFailure
+---
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: scale-up-replicas-weekend
+  namespace: front-ops
+spec:
+  schedule: "0 0 * * 0,6" # 매주 토요일과 일요일 0시
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          containers:
+          - name: scale-up
+            image: bitnami/kubectl:latest
+            command:
+            - /bin/sh
+            - -c
+            - |
+              kubectl scale deployment front-ops --replicas=3 -n front-ops
+          restartPolicy: OnFailure
+
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  namespace: front-ops
+  name: scale-role
+rules:
+- apiGroups: ["apps"]
+  resources: ["deployments/scale"]
+  verbs: ["update"]
+
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  namespace: front-ops
+  name: scale-rolebinding
+subjects:
+- kind: ServiceAccount
+  name: default
+  namespace: front-ops
+roleRef:
+  kind: Role
+  name: scale-role
+  apiGroup: rbac.authorization.k8s.io

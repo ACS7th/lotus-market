@@ -1,0 +1,29 @@
+apiVersion: v1
+kind: ResourceQuota
+metadata:
+  name: front-ops-rq
+  namespace: front-ops
+spec:
+  hard:
+    requests.cpu: "4"     
+    requests.memory: "4Gi"
+    limits.cpu: "5"          
+    limits.memory: "6Gi"    
+---
+apiVersion: v1
+kind: LimitRange
+metadata:
+  name: front-ops-lr
+  namespace: front-ops
+spec:
+  limits:
+  - type: Container
+    defaultRequest:
+      cpu: "1"
+      memory: "2Gi"
+    default:
+      cpu: "2"
+      memory: "4Gi"
+    max:
+      cpu: "3"
+      memory: "5Gi"
