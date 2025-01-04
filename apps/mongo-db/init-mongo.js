@@ -1,4 +1,4 @@
-db = db.getSiblingDB('admin');
+db = db.getSiblingDB('lotus-db');
 
 db.createUser({
     user: "kevin",
