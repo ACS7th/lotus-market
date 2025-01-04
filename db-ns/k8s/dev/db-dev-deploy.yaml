@@ -16,6 +16,7 @@ spec:
       labels:
         app: db-dev
     spec:
+      priorityClassName: db-dev-priority
       volumes:
       - name: mongo-pv-storage
         persistentVolumeClaim:
@@ -34,4 +35,4 @@ spec:
             memory: "1Gi"
           limits:
             cpu: "1"
-            memory: "1Gi"
+            memory: "2Gi"

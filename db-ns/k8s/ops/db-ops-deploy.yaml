@@ -16,6 +16,7 @@ spec:
       labels:
         app: db-ops
     spec:
+      priorityClassName: db-ops-priority
       volumes:
       - name: mongo-pv-storage
         persistentVolumeClaim:

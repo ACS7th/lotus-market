@@ -8,7 +8,6 @@ metadata:
 spec:
   selector:
     app: front-ops
-  #type: LoadBalancer
   type: LoadBalancer
   ports:
   - protocol: TCP

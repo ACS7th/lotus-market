@@ -5,10 +5,10 @@ metadata:
   namespace: front-dev
 spec:
   hard:
-    requests.cpu: "1"         
-    requests.memory: "512Mi"
-    limits.cpu: "1"        
-    limits.memory: "1Gi"  
+    requests.cpu: "2"         
+    requests.memory: "3Gi"
+    limits.cpu: "3"        
+    limits.memory: "4Gi"  
 ---
 apiVersion: v1
 kind: LimitRange
@@ -20,10 +20,10 @@ spec:
   - type: Container
     defaultRequest:
       cpu: "1"           
-      memory: "512Mi"  
+      memory: "1Gi"  
     default:
       cpu: "1"        
-      memory: "1Gi"  
+      memory: "2Gi"  
     max:
-      cpu: "1"
-      memory: "1Gi"
+      cpu: "2"
+      memory: "3Gi"
