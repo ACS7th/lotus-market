@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: db-dev-mongo-pvc-restored
+  namespace: db-dev
+spec:
+  storageClassName: longhorn
+  volumeName: test-snap1
+  accessModes:
+  - ReadWriteOnce
+  resources:
+    requests:
+      storage: 4Gi
+

@@ -1,0 +1,7 @@
+apiVersion: scheduling.k8s.io/v1
+kind: PriorityClass
+metadata:
+  name: db-ops-priority
+value: 1000
+globalDefault: false
+description: "Highest priority for db-ops workloads."

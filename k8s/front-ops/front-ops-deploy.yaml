@@ -1,0 +1,36 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: front-ops
+  namespace: front-ops
+  labels:
+    app: front-ops
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: front-ops
+  template:
+    metadata:
+      labels:
+        app: front-ops
+    spec:
+      priorityClassName: priority-front-ops
+      containers:
+      - name: front-ops-container
+        image: dealim/lotus-market-next:1.5
+        ports:
+        - containerPort: 3000
+        resources:
+          requests:
+            cpu: "1"
+            memory: "2Gi"
+          limits:
+            cpu: "2"
+            memory: "3Gi"
+        env:
+        - name: API_SERVER_URL
+          valueFrom:
+            configMapKeyRef:
+              name: front-ops-cm
+              key: API_SERVER_URL

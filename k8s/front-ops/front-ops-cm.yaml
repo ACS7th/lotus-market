@@ -1,0 +1,7 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: front-ops-cm
+  namespace: front-ops
+data:
+  API_SERVER_URL: back-ops-svc.back-ops.svc.cluster.local:8765

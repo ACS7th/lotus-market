@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: back-ops-svc
+  namespace: back-ops
+  labels:
+    app: back-ops
+spec:
+  selector:
+    app: back-ops
+  ports:
+    - protocol: TCP
+      port: 8765
+      targetPort: 8765

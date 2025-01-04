@@ -1,0 +1,44 @@
+services:
+  backend:
+    image: dealim/lotus-market-spring:1.6
+    build:
+      context: ./back-ns/spring-lotus-market
+      dockerfile: ./Dockerfile
+    environment:
+      - SPRING_PROFILES_ACTIVE=prod
+      - DB_USERNAME=${DB_USERNAME}
+      - DB_PASSWORD=${DB_PASSWORD}
+      - DB_URL=db:27017
+      - GOOGLE_APPLICATION_CREDENTIALS=/app/key.json
+      - GOOGLE_CLOUD_PROJECT=k8s-kimjc
+    volumes:
+      - ~/.config/gcloud/application_default_credentials.json:/app/key.json
+    ports:
+      - "8765:8765"
+    depends_on:
+      - db
+
+  db:
+    image: dealim/lotus-market-mongo:1.2
+    build:
+      context: ./db-ns
+      dockerfile: ./Dockerfile
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=${MONGO_INITDB_ROOT_USERNAME}
+      - MONGO_INITDB_ROOT_PASSWORD=${MONGO_INITDB_ROOT_PASSWORD}
+    volumes:
+      - ./db-ns/init-mongo.js:/docker-entrypoint-initdb.d/init-mongo.js
+    ports:
+      - "27017:27017"
+
+  front:
+    image: dealim/lotus-market-next:1.4
+    build:
+      context: ./front-ns/next-app
+      dockerfile: ./Dockerfile
+    environment:
+      - API_SERVER_URL=backend:8765 
+    ports:
+      - "3000:3000"
+    depends_on:
+      - backend
