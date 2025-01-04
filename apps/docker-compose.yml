@@ -2,10 +2,10 @@ services:
   backend:
     image: dealim/lotus-market-spring:2.0
     build:
-      context: ./back-ns/spring-lotus-market
-      dockerfile: ./Dockerfile
+      context: ./spring-app/
+      dockerfile: Dockerfile-dev
     environment:
-      - SPRING_PROFILES_ACTIVE=prod
+      - SPRING_PROFILES_ACTIVE=dev
       - DB_USERNAME=${DB_USERNAME}
       - DB_PASSWORD=${DB_PASSWORD}
       - DB_URL=db:27017
@@ -13,7 +13,7 @@ services:
       - GOOGLE_CLOUD_PROJECT=k8s-kimjc
     volumes:
       - ~/.config/gcloud/application_default_credentials.json:/app/key.json
-      - ./back-ns/spring-lotus-market/src:/app/src
+      - ./spring-app/src:/app/src
     ports:
       - "8765:8765"
     depends_on:
@@ -22,48 +22,27 @@ services:
   db:
     image: dealim/lotus-market-mongo:1.3
     build:
-      context: ./db-ns
+      context: ./mongo-db/
       dockerfile: ./Dockerfile
     environment:
       - MONGO_INITDB_ROOT_USERNAME=${MONGO_INITDB_ROOT_USERNAME}
       - MONGO_INITDB_ROOT_PASSWORD=${MONGO_INITDB_ROOT_PASSWORD}
     volumes:
-      - ./db-ns/init-mongo.js:/docker-entrypoint-initdb.d/init-mongo.js
+      - ./mongo-db/init-mongo.js:/docker-entrypoint-initdb.d/init-mongo.js
     ports:
       - "27017:27017"
 
   front:
     image: dealim/lotus-market-next:1.5
     build:
-      context: ./front-ns/next-app
+      context: ./next-app/
       dockerfile: ./Dockerfile
     environment:
       - API_SERVER_URL=backend:8765 
     ports:
       - "3000:3000"
     volumes:
-      - ./front-ns/next-app/src/:/app/src
-
-  prometheus:
-    image: prom/prometheus
-    container_name: prometheus
-    volumes:
-      - ./monitoring-ns/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
-    ports:
-      - "9090:9090"
-
-  grafana:
-    image: grafana/grafana
-    container_name: grafana
-    ports:
-      - "3001:3000"
-    environment:
-      - GF_SECURITY_ADMIN_USER=admin
-      - GF_SECURITY_ADMIN_PASSWORD=admin
-    volumes:
-      - grafana-data:/var/lib/grafana
-    depends_on:
-      - prometheus
+      - ./next-app/src/:/app/src/
 
 volumes:
   grafana-data:

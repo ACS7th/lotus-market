@@ -1,0 +1,10 @@
+FROM gradle:jdk17 AS runtime
+
+WORKDIR /app
+COPY gradle gradle
+COPY gradlew .
+COPY build.gradle .
+COPY settings.gradle .
+COPY src src
+
+CMD ["./gradlew", "bootRun", "--no-daemon"]
