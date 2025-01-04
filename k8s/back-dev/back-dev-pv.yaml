@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: back-dev-spring-pv
+  namespace: back-dev
+spec:
+  capacity:
+    storage: 2Gi
+  accessModes:
+    - ReadWriteOnce
+  persistentVolumeReclaimPolicy: Retain
+  hostPath:
+    path: /home/kevin/k8s-lotus-market/apps/spring-app/build
+    type: DirectoryOrCreate

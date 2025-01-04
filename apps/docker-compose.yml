@@ -1,11 +1,11 @@
 services:
   backend:
-    image: dealim/lotus-market-spring:2.0
+    image: dealim/lotus-market-spring:2.1
     build:
       context: ./spring-app/
-      dockerfile: Dockerfile-dev
+      dockerfile: Dockerfile
     environment:
-      - SPRING_PROFILES_ACTIVE=dev
+      - SPRING_PROFILES_ACTIVE=prod
       - DB_USERNAME=${DB_USERNAME}
       - DB_PASSWORD=${DB_PASSWORD}
       - DB_NAME=lotus-db

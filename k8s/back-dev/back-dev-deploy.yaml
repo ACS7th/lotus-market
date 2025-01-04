@@ -16,7 +16,11 @@ spec:
         app: back-dev
     spec:
       priorityClassName: back-dev-priority
+      nodeName: k8s-master
       volumes:
+      - name: spring-src-vol
+        persistentVolumeClaim:
+          claimName: back-dev-spring-pvc
       - name: gcp-key-vol
         secret:
           secretName: back-gcp-secret
@@ -29,8 +33,10 @@ spec:
         ports:
         - containerPort: 8765
         volumeMounts:
+        - name: spring-src-vol
+          mountPath: /app/build
         - name: gcp-key-vol
-          mountPath: /app/key.json
+          mountPath: /key/key.json
           subPath: key.json
           readOnly: true
         envFrom:
@@ -47,30 +53,3 @@ spec:
             secretKeyRef:
               name: back-db-secret
               key: MONGO_PASSWORD
-        resources:
-          requests:
-            cpu: "1"
-            memory: "1Gi"
-          limits:
-            cpu: "1"
-            memory: "2Gi"
----
-apiVersion: autoscaling/v2
-kind: HorizontalPodAutoscaler
-metadata:
-  name: back-dev-hpa
-  namespace: back-dev
-spec:
-  scaleTargetRef:
-    apiVersion: apps/v1
-    kind: Deployment
-    name: back-dev
-  minReplicas: 1
-  maxReplicas: 5
-  metrics:
-  - type: Resource
-    resource:
-      name: cpu
-      target:
-        type: Utilization
-        averageUtilization: 20

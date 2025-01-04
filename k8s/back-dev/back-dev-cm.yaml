@@ -5,6 +5,7 @@ metadata:
   namespace: back-dev
 data:
   DB_URL: db-dev-svc.db-dev.svc.cluster.local:27017
-  GOOGLE_APPLICATION_CREDENTIALS: /app/key.json
+  DB_NAME: lotus-db
+  GOOGLE_APPLICATION_CREDENTIALS: /key/key.json
   GOOGLE_CLOUD_PROJECT: k8s-kimjc
   SPRING_PROFILES_ACTIVE: prod
