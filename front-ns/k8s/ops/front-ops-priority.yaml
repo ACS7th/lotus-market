@@ -1,0 +1,7 @@
+apiVersion: scheduling.k8s.io/v1
+kind: PriorityClass
+metadata:
+  name: front-ops-priority
+value: 900
+globalDefault: false
+description: "High priority for front-ops workloads."

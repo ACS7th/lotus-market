@@ -5,10 +5,10 @@ metadata:
   namespace: back-dev
 spec:
   hard:
-    requests.cpu: "1"
-    requests.memory: "1Gi"
-    limits.cpu: "1"
-    limits.memory: "2Gi"
+    requests.cpu: "2"
+    requests.memory: "4Gi"
+    limits.cpu: "4"
+    limits.memory: "6Gi"
 ---
 apiVersion: v1
 kind: LimitRange
@@ -25,5 +25,5 @@ spec:
       cpu: "1"
       memory: "1Gi"
     max:
-      cpu: "1"
-      memory: "2Gi"
+      cpu: "2"
+      memory: "3Gi"

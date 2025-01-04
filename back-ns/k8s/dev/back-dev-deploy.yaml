@@ -15,6 +15,7 @@ spec:
       labels:
         app: back-dev
     spec:
+      priorityClassName: back-dev-priority
       volumes:
       - name: gcp-key-vol
         secret:
@@ -53,3 +54,23 @@ spec:
           limits:
             cpu: "1"
             memory: "2Gi"
+---
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: back-dev-hpa
+  namespace: back-dev
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: back-dev
+  minReplicas: 1
+  maxReplicas: 5
+  metrics:
+  - type: Resource
+    resource:
+      name: cpu
+      target:
+        type: Utilization
+        averageUtilization: 20

@@ -15,6 +15,7 @@ spec:
       labels:
         app: front-ops
     spec:
+      priorityClassName: priority-front-ops
       containers:
       - name: front-ops-container
         image: dealim/lotus-market-next:1.5
@@ -23,7 +24,7 @@ spec:
         resources:
           requests:
             cpu: "1"
-            memory: "1Gi"
+            memory: "2Gi"
           limits:
             cpu: "2"
             memory: "3Gi"
@@ -33,23 +34,3 @@ spec:
             configMapKeyRef:
               name: front-ops-cm
               key: API_SERVER_URL
----
-apiVersion: autoscaling/v2
-kind: HorizontalPodAutoscaler
-metadata:
-  name: front-ops-hpa
-  namespace: front-ops
-spec:
-  scaleTargetRef:
-    apiVersion: apps/v1
-    kind: Deployment
-    name: front-ops
-  minReplicas: 2
-  maxReplicas: 10
-  metrics:
-  - type: Resource
-    resource:
-      name: cpu
-      target:
-        type: Utilization
-        averageUtilization: 70

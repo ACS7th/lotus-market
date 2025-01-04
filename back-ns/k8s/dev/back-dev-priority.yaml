@@ -1,0 +1,7 @@
+apiVersion: scheduling.k8s.io/v1
+kind: PriorityClass
+metadata:
+  name: back-dev-priority
+value: 500
+globalDefault: false
+description: "Lowest priority for back-dev workloads."

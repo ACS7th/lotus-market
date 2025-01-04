@@ -5,10 +5,10 @@ metadata:
   namespace: db-dev
 spec:
   hard:
-    requests.cpu: "1"
-    requests.memory: "1Gi"
-    limits.cpu: "1.5"
-    limits.memory: "1Gi"
+    requests.cpu: "2"
+    requests.memory: "4Gi"
+    limits.cpu: "3"
+    limits.memory: "5Gi"
 ---
 apiVersion: v1
 kind: LimitRange
@@ -23,7 +23,7 @@ spec:
       memory: "1Gi"
     default:
       cpu: "1"
-      memory: "1Gi"
+      memory: "2Gi"
     max:
-      cpu: "1"
-      memory: "1Gi"
+      cpu: "2"
+      memory: "4Gi"

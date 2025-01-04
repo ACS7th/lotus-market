@@ -42,6 +42,17 @@ data:
           - "alertmanager.monitoring.svc:9093"
 
     scrape_configs:
+      - job_name: 'spring-boot-backend'
+        metrics_path: '/actuator/prometheus'
+        static_configs:
+          - targets:
+            - 'back-ops-svc.back-ops.svc.cluster.local:8765'
+            - 'back-dev-svc.back-dev.svc.cluster.local:8765'
+        relabel_configs:
+          - source_labels: [__address__]
+            action: replace
+            target_label: instance
+
       - job_name: 'kubernetes-apiservers'
 
         kubernetes_sd_configs:
