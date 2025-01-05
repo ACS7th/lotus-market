@@ -28,7 +28,7 @@ spec:
           - key: key.json
             path: key.json
       containers:
-      - image: dealim/lotus-market-spring:2.0
+      - image: harbor.asordk.synology.me/lotus-market/spring:2.0
         name: back-dev-container
         ports:
         - containerPort: 8765
