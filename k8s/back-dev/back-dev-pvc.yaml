@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: back-dev-spring-pvc
+  namespace: back-dev
+spec:
+  accessModes:
+    - ReadWriteOnce 
+  volumeName: back-dev-spring-pv
+  resources:
+    requests:
+      storage: 2Gi

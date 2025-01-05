@@ -1,0 +1,15 @@
+FROM gradle:jdk17 AS builder
+
+WORKDIR /app
+
+COPY gradle gradle
+COPY gradlew .
+COPY build.gradle .
+COPY settings.gradle .
+
+RUN ./gradlew dependencies --no-daemon
+
+COPY src src
+
+CMD ["./gradlew", "bootRun", "--no-daemon"]
+

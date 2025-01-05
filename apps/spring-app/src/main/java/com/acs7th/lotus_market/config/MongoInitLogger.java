@@ -12,9 +12,9 @@ import javax.annotation.PostConstruct;
 
 @Component
 @Slf4j
-public class AppConfigLogger {
+public class MongoInitLogger {
 
-    @Value("${spring.data.mongodb.uri}")
+    @Value("${spring.data.mongodb.uri:no_input_mongouri}")
     private String mongoUri;
 
     @PostConstruct
@@ -44,7 +44,7 @@ public class AppConfigLogger {
             if (!connectionSuccessful) {
                 count++;
                 try {
-                    Thread.sleep(5000); // 5초 대기
+                    Thread.sleep(5000);
                 } catch (InterruptedException e) {
                     log.error("Sleep interrupted", e);
                     Thread.currentThread().interrupt(); // 인터럽트 상태 복구
@@ -55,8 +55,6 @@ public class AppConfigLogger {
 
         if (!connectionSuccessful) {
             log.error("### MongoDB 연결에 실패했습니다. 10번의 시도 후 종료합니다. ###");
-        } else {
-            log.info("### Logging completed after successful MongoDB connection ###");
         }
     }
 }

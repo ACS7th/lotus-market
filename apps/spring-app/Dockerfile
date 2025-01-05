@@ -13,8 +13,6 @@ RUN ./gradlew clean bootJar --no-daemon
 ###
 FROM openjdk:17-jdk-slim
 
-ENV SPRING_PROFILES_ACTIVE=prod
-
 WORKDIR /app
 
 COPY --from=builder /app/build/libs/*.jar app.jar
